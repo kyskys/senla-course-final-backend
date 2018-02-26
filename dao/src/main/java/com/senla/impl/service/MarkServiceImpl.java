@@ -1,7 +1,6 @@
 package com.senla.impl.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.senla.api.dao.AbstractDao;
@@ -9,7 +8,7 @@ import com.senla.api.dao.MarkDao;
 import com.senla.api.service.MarkService;
 import com.senla.entity.Mark;
 
-@Repository
+@Service
 public class MarkServiceImpl extends AbstractServiceImpl<Mark> implements MarkService {
 
 	@Autowired

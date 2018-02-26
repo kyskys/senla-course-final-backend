@@ -10,6 +10,10 @@ public enum RoleEnum {
 		this.value = roleValue;
 	}
 
+	public String getValue() {
+		return this.value;
+	}
+
 	public static class Values {
 		public static final String ADMIN = "Admin";
 		public static final String LECTURER = "Lecturer";

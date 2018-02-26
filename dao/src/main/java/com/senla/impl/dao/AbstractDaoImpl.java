@@ -11,18 +11,14 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-
 import com.senla.api.dao.AbstractDao;
 import com.senla.entity.AbstractEntity;
 
-@Repository
 public abstract class AbstractDaoImpl<T extends AbstractEntity> implements AbstractDao<T> {
 	@Autowired
 	private SessionFactory factory;
 
-	public Session getSession() {
+	protected Session getSession() {
 		try {
 			return factory.getCurrentSession();
 		} catch (HibernateException e) {

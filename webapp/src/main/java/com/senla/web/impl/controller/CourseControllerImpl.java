@@ -34,9 +34,9 @@ public class CourseControllerImpl implements CourseController {
 		courseService.create(course);
 		course.setDescription(dto.getDescription());
 		for (Long idLection : dto.getLections()) {
-			// courseService.
+			courseService.addLectionToCourse(idLection, dto.getId());
 		}
-		// course.setLections(courseDto.ge);
+		courseService.addLecturerToCourse();
 	}
 
 	@Override

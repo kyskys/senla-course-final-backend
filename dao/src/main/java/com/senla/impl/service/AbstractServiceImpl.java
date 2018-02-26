@@ -2,15 +2,12 @@ package com.senla.impl.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.senla.api.dao.AbstractDao;
 import com.senla.api.service.AbstractService;
 import com.senla.entity.AbstractEntity;
 
-@Repository
 public abstract class AbstractServiceImpl<T extends AbstractEntity> implements AbstractService<T> {
 
 	protected abstract AbstractDao<T> getDao();
@@ -34,7 +31,6 @@ public abstract class AbstractServiceImpl<T extends AbstractEntity> implements A
 		return getDao().get(id);
 	}
 
-	
 	public List<T> getAll() {
 		return getDao().getAll();
 	}

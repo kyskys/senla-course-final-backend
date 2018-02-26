@@ -4,19 +4,21 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.SecondaryTable;
 import javax.persistence.SecondaryTables;
 import javax.persistence.Table;
 
+import com.senla.entity.util.RoleEnum;
+
 @Entity
 @Table(name = "person")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
-@SecondaryTables(value = { 
-		@SecondaryTable(name = "person_details"), 
-		@SecondaryTable(name = "person_creds") })
+@SecondaryTables(value = { @SecondaryTable(name = "person_details"), @SecondaryTable(name = "person_creds") })
 public abstract class Person extends AbstractEntity {
 
 	@Column(name = "name")
@@ -24,6 +26,10 @@ public abstract class Person extends AbstractEntity {
 
 	@Column(name = "email", table = "person_details")
 	protected String email;
+
+	@Column(name = "role")
+	@Enumerated(value = EnumType.STRING)
+	protected RoleEnum role;
 
 	@Column(name = "phone_number", table = "person_details")
 	protected Integer number;
@@ -72,5 +78,13 @@ public abstract class Person extends AbstractEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public RoleEnum getRole() {
+		return role;
+	}
+
+	public void setRole(RoleEnum role) {
+		this.role = role;
 	}
 }
