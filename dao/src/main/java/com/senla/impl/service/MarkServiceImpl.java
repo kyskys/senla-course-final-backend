@@ -19,4 +19,14 @@ public class MarkServiceImpl extends AbstractServiceImpl<Mark> implements MarkSe
 		return markDao;
 	}
 
+	@Override
+	public void addPairToMark(Long idPair, Long idMark) {
+		markDao.addPairToMark(idPair, idMark);
+	}
+
+	@Override
+	public void addStudentToMark(Long idStudent, Long idMark) {
+		markDao.addStudentToMark(idStudent, idMark);
+	}
+
 }

@@ -22,10 +22,10 @@
 
 	<context:component-scan base-package="com.senla.web.impl.controller" />
 	
-	<!--  <bean id="currentUserHolder" class="holder.CurrentUserHolder"
+	<bean id="currentUserHolder" class="com.senla.holder.user.CurrentUserHolder"
 		scope="request" />
-	<bean id="applicationContextProvider" class="provider.ApplicationContextProvider" />
-	-->
+	<bean id="applicationContextProvider" class="com.senla.holder.provider.ApplicationContextProvider" />
+	
 	<import resource="DaoContext.xml" />
 	<import resource="beans.xml"/>
 </beans>

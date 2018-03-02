@@ -15,29 +15,29 @@ import javax.persistence.Table;
 import com.senla.entity.util.RoleEnum;
 
 @Entity
-@Table(name = "person")
+@Table(name = "user")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role", discriminatorType = DiscriminatorType.STRING)
-@SecondaryTables(value = { @SecondaryTable(name = "person_details"), @SecondaryTable(name = "person_creds") })
-public abstract class Person extends AbstractEntity {
+@SecondaryTables(value = { @SecondaryTable(name = "user_details"), @SecondaryTable(name = "user_creds") })
+public class Person extends AbstractEntity {
 
 	@Column(name = "name")
 	protected String name;
 
-	@Column(name = "email", table = "person_details")
+	@Column(name = "email", table = "user_details")
 	protected String email;
 
-	@Column(name = "role")
+	@Column(name = "role", insertable = false, updatable = false)
 	@Enumerated(value = EnumType.STRING)
 	protected RoleEnum role;
 
-	@Column(name = "phone_number", table = "person_details")
+	@Column(name = "phone_number", table = "user_details")
 	protected Integer number;
 
-	@Column(name = "login", table = "person_creds")
+	@Column(name = "login", table = "user_creds")
 	protected String login;
 
-	@Column(name = "password", table = "person_creds")
+	@Column(name = "password", table = "user_creds")
 	protected String password;
 
 	public String getPassword() {

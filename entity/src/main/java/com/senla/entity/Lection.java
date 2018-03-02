@@ -17,7 +17,7 @@ public class Lection extends AbstractEntity {
 
 	@Column(name="name")
 	private String name;
-	
+
 	@OneToOne(mappedBy="lection")
 	private Pair pair;
 
@@ -35,6 +35,14 @@ public class Lection extends AbstractEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Pair getPair() {
+		return pair;
+	}
+
+	public void setPair(Pair pair) {
+		this.pair = pair;
 	}
 
 }

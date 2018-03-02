@@ -13,6 +13,10 @@ import com.senla.entity.util.RoleEnum;
 @Entity
 @DiscriminatorValue(value = RoleEnum.Values.LECTURER)
 public class Lecturer extends Person {
+	
+	{
+		this.role = RoleEnum.LECTURER;
+	}
 
 	@OneToMany(mappedBy = "lecturer", fetch = FetchType.LAZY)
 	private List<Course> courses = new ArrayList<Course>();

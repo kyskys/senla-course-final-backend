@@ -12,7 +12,7 @@ import com.senla.entity.Admin;
 public class AdminServiceImpl extends AbstractServiceImpl<Admin> implements AdminService {
 
 	@Autowired
-	AdminDao adminDao;
+	private AdminDao adminDao;
 
 	@Override
 	protected AbstractDao<Admin> getDao() {

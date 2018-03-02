@@ -6,13 +6,15 @@ import com.senla.entity.AbstractEntity;
 
 public interface AbstractService<T extends AbstractEntity> {
 
-	boolean create(T entity);
+	void create(T entity);
 
-	boolean delete(T entity);
+	void delete(T entity);
 
-	boolean update(T entity);
+	void update(T entity);
 
 	T get(Long id);
 
 	List<T> getAll();
+	
+	Long count();
 }

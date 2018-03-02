@@ -1,7 +1,18 @@
 package com.senla.api.dao;
 
-import com.senla.entity.Course;
+import java.util.List;
 
-public interface CourseDao extends AbstractDao<Course> {
-	
+import com.senla.dao.search.CourseSearchParams;
+import com.senla.dao.search.Searchable;
+import com.senla.entity.Course;
+import com.senla.entity.Lection;
+
+public interface CourseDao extends AbstractDao<Course>, Searchable<CourseSearchParams, Course> {
+
+	void addLectionToCourse(Long idLection, Long idCourse);
+
+	void removeLectionFromCourse(Long idLection);
+
+	List<Lection> getLectionsByCourseId(Long idCourse);
+
 }

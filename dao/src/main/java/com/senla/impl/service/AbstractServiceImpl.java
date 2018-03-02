@@ -13,26 +13,35 @@ public abstract class AbstractServiceImpl<T extends AbstractEntity> implements A
 	protected abstract AbstractDao<T> getDao();
 
 	@Transactional
-	public boolean create(T entity) {
-		return getDao().create(entity);
+	@Override
+	public void create(T entity) {
+		getDao().create(entity);
 	}
 
 	@Transactional
-	public boolean delete(T entity) {
-		return getDao().delete(entity);
+	@Override
+	public void delete(T entity) {
+		getDao().delete(entity);
 	}
 
 	@Transactional
-	public boolean update(T entity) {
-		return getDao().update(entity);
+	@Override
+	public void update(T entity) {
+		getDao().update(entity);
 	}
 
+	@Override
 	public T get(Long id) {
 		return getDao().get(id);
 	}
 
+	@Override
 	public List<T> getAll() {
 		return getDao().getAll();
 	}
-
+	
+	@Override
+	public Long count() {
+		return getDao().count();
+	}
 }

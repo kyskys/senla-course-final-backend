@@ -1,10 +1,12 @@
 package com.senla.api.service;
 
+import java.util.List;
+
+import com.senla.entity.Course;
 import com.senla.entity.Lecturer;
 
 public interface LecturerService extends AbstractService<Lecturer> {
-	boolean addCourseToLecturer(Long idCourse, Long idLecturer);
-
-	boolean removeCourseFromLecturer(Long idCourse, Long idLecturer);
-
+	void addCourseToLecturer(Long idCourse, Long idLecturer);
+	
+	List<Course> getCoursesByLecturerId(Long idLecturer);
 }

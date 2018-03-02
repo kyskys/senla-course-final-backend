@@ -8,13 +8,15 @@ public interface AbstractDao<T extends AbstractEntity> {
 
 	Class<T> getGenericClass();
 
-	boolean create(T entity);
+	void create(T entity);
 
-	boolean delete(T entity);
+	void delete(T entity);
 
-	boolean update(T entity);
+	void update(T entity);
 
 	T get(Long id);
 
 	List<T> getAll();
+	
+	Long count();
 }

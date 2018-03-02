@@ -13,7 +13,7 @@ public class PairServiceImpl extends AbstractServiceImpl<Pair> implements PairSe
 
 	@Autowired
 	PairDao pairDao;
-
+	
 	@Override
 	protected AbstractDao<Pair> getDao() {
 		return pairDao;

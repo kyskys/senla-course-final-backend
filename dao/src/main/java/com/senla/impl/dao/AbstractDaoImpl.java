@@ -26,26 +26,27 @@ public abstract class AbstractDaoImpl<T extends AbstractEntity> implements Abstr
 		}
 	}
 
-	public boolean create(T entity) {
+	@Override
+	public void create(T entity) {
 		getSession().save(entity);
-		return true;
 	}
 
-	public boolean delete(T entity) {
+	@Override
+	public void delete(T entity) {
 		getSession().delete(entity);
-		return true;
 	}
 
-	public boolean update(T entity) {
+	@Override
+	public void update(T entity) {
 		getSession().update(entity);
-		return true;
 	}
 
+	@Override
 	public T get(Long id) {
-		getSession().get(getGenericClass(), id);
-		return null;
+		return getSession().get(getGenericClass(), id);
 	}
 
+	@Override
 	public List<T> getAll() {
 		Session session = getSession();
 		CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -54,6 +55,17 @@ public abstract class AbstractDaoImpl<T extends AbstractEntity> implements Abstr
 		query.select(root);
 		TypedQuery<T> result = session.createQuery(query);
 		return result.getResultList();
+	}
+	
+	@Override
+	public Long count() {
+		Session session = getSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Long> query = builder.createQuery(Long.class);
+		Root<T> root = query.from(getGenericClass());
+		query.select(builder.count(root));
+		TypedQuery<Long> result = session.createQuery(query);
+		return result.getSingleResult();
 	}
 
 }

@@ -14,16 +14,18 @@ import com.senla.entity.util.RoleEnum;
 @Entity
 @DiscriminatorValue(value = RoleEnum.Values.STUDENT)
 public class Student extends Person {
-	
+
+	{
+		this.role = RoleEnum.STUDENT;
+	}
+
 	@ManyToOne
-	@JoinTable( name = "group_students", 
-				joinColumns = @JoinColumn(name = "student_id"), 
-				inverseJoinColumns = @JoinColumn(name = "group_id"))
+	@JoinTable(name = "group_students", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
 	private Group group;
 
-	@OneToMany(mappedBy="pair")
+	@OneToMany(mappedBy = "pair")
 	private List<Mark> marks;
-	
+
 	public Group getGroup() {
 		return group;
 	}

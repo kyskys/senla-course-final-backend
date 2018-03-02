@@ -15,8 +15,8 @@ public enum RoleEnum {
 	}
 
 	public static class Values {
-		public static final String ADMIN = "Admin";
-		public static final String LECTURER = "Lecturer";
-		public static final String STUDENT = "Student";
+		public static final String ADMIN = "ADMIN";
+		public static final String LECTURER = "LECTURER";
+		public static final String STUDENT = "STUDENT";
 	}
 }

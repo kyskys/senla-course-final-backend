@@ -7,6 +7,10 @@ import com.senla.entity.util.RoleEnum;
 
 @Entity
 @DiscriminatorValue(value = RoleEnum.Values.ADMIN)
-public class Admin extends AbstractEntity {
+public class Admin extends Person {
+	
+	{
+		this.role = RoleEnum.ADMIN;
+	}
 
 }

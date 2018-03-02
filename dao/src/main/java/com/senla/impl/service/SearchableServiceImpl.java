@@ -2,23 +2,23 @@ package com.senla.impl.service;
 
 import java.util.List;
 
-import com.senla.api.dao.SearchableDao;
-import com.senla.api.service.SearchableService;
-import com.senla.dao.util.SortParam;
+import com.senla.dao.search.Searchable;
+import com.senla.dao.search.SortParam;
 import com.senla.entity.AbstractEntity;
 
-public abstract class SearchableServiceImpl<T extends AbstractEntity, R> extends AbstractServiceImpl<T>
-		implements SearchableService<R, T> {
+public abstract class SearchableServiceImpl<T, R extends AbstractEntity> extends AbstractServiceImpl<R>
+		implements Searchable<T, R> {
 
 	@Override
-	public List<T> search(SortParam sortParam, R searchParam, int limit, int offset) {
-		return getSearchableDao().search(sortParam, searchParam, limit, offset);
+	public List<R> search(SortParam sortParam, T searchParam, int limit, int offset, boolean asc) {
+		return getSearchableDao().search(sortParam, searchParam, limit, offset, asc);
 	}
 
-	@SuppressWarnings("unchecked")
+	protected abstract Searchable<T, R> getSearchableDao();
+
 	@Override
-	public SearchableDao<R, T> getSearchableDao() {
-		return (SearchableDao<R, T>) getDao();
+	public Long count(T searchParam) {
+		return getSearchableDao().count(searchParam);
 	}
-
+	
 }

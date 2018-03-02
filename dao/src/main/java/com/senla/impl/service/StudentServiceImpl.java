@@ -19,4 +19,14 @@ public class StudentServiceImpl extends AbstractServiceImpl<Student> implements 
 		return studentDao;
 	}
 
+	@Override
+	public void addGroupToStudent(Long idGroup, Long idStudent) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void removeGroupFromStudent(Long idGroup, Long idStudent) {
+		// TODO Auto-generated method stub
+	}
+
 }

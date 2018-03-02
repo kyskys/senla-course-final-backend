@@ -9,7 +9,8 @@
     <module>entity</module>
     <module>dao</module>
     <module>webapp</module>
-    <module>controller</module>
+    
+    <module>holder</module>
   </modules>
   <build>
 		<plugins>
