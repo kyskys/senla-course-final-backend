@@ -134,7 +134,6 @@ public class CourseControllerImpl implements CourseController, CurrentUserSuppor
 			@RequestParam(value = "lecturer", required = false) String idLecturer) {
 		CourseSearchParams searchParam = new CourseSearchParams(id, name, idLecturer);
 		Long asd = courseService.count(searchParam);
-		System.out.print(asd);
 		return asd;
 	}
 }

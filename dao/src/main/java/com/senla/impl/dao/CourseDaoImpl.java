@@ -1,6 +1,9 @@
 package com.senla.impl.dao;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import javax.persistence.criteria.Predicate;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -64,15 +67,17 @@ public class CourseDaoImpl extends SearchableDaoImpl<CourseSearchParams, Course>
 
 	@Override
 	protected void applyFilters(CourseSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder, Root<Course> root) {
+		List<Predicate> predicates = new ArrayList<Predicate>();
 		if (searchParam.getId() != null) {
-			query.where(builder.equal(root.get(SORT_PARAM_ID), searchParam.getId()));
+			predicates.add(builder.equal(root.get(SORT_PARAM_ID), searchParam.getId()));
 		}
 		if (searchParam.getName() != null) {
-			query.where(builder.like(root.get(SORT_PARAM_NAME), like(searchParam.getName())));
+			predicates.add(builder.like(root.get(SORT_PARAM_NAME), like(searchParam.getName())));
 		}
 		if (searchParam.getLecturer() != null) {
-			query.where(builder.equal(root.get(SORT_PARAM_LECTURER), searchParam.getLecturer()));
+			predicates.add(builder.like(root.join(SORT_PARAM_LECTURER).get("name"), like(searchParam.getLecturer())));
 		}
+		query.where(predicates.toArray(new Predicate[predicates.size()]));
 	}
 
 }
