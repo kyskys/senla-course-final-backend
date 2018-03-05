@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import com.senla.api.dao.AbstractDao;
 import com.senla.api.dao.MarkDao;
 import com.senla.api.service.MarkService;
+import com.senla.dao.search.MarkSearchParams;
+import com.senla.dao.search.Searchable;
 import com.senla.entity.Mark;
 
 @Service
-public class MarkServiceImpl extends AbstractServiceImpl<Mark> implements MarkService {
+public class MarkServiceImpl extends SearchableServiceImpl<MarkSearchParams, Mark> implements MarkService {
 
 	@Autowired
 	MarkDao markDao;
@@ -20,13 +22,18 @@ public class MarkServiceImpl extends AbstractServiceImpl<Mark> implements MarkSe
 	}
 
 	@Override
-	public void addPairToMark(Long idPair, Long idMark) {
-		markDao.addPairToMark(idPair, idMark);
+	protected Searchable<MarkSearchParams, Mark> getSearchableDao() {
+		return markDao;
 	}
 
 	@Override
-	public void addStudentToMark(Long idStudent, Long idMark) {
-		markDao.addStudentToMark(idStudent, idMark);
+	public void cloneMarkToPair(Long idPair, Long idMark) {
+		markDao.cloneMarkToPair(idPair, idMark);
+	}
+
+	@Override
+	public void cloneMarkToStudent(Long idStudent, Long idMark) {
+		markDao.cloneMarkToStudent(idStudent, idMark);
 	}
 
 }

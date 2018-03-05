@@ -11,10 +11,15 @@ import com.senla.web.dto.UserDetailsDto;
 @RestController
 public class UserControllerImpl implements UserController, CurrentUserSupport {
 
-	@RequestMapping(value = "/api/profile", method = RequestMethod.GET)
+	@RequestMapping(value = "/api/user/profile", method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public UserDetailsDto getUserDetails() {
 		return new UserDetailsDto(getCurrentUser());
 	}
 
+	@RequestMapping(value = "/api/user/name", method = RequestMethod.GET)
+	@Override
+	public String getUserName() {
+		return "{\"name\" : \""+getCurrentUser().getName()+"\"}";
+	}
 }

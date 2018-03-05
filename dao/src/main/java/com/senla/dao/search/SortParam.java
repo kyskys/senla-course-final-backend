@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public enum SortParam {
 	NAME("name"), ID("id"), DATE("date"), LECTURER_ID("lecturer"), PAIR_ID("pair"), EMAIL("email"), PHONE_NUMBER(
-			"phone"), STUDENT_ID("student"), LECTION_ID("lection"), TIME("time"), GROUP_ID("group");
+			"number"), STUDENT_ID("student"), LECTION_ID("lection"), TIME("time"), GROUP_ID("group"), COURSE_ID("course");
 
 	private String value;
 

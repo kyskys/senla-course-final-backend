@@ -5,9 +5,9 @@ public class StudentSearchParams {
 	private String email;
 	private String name;
 	private Integer number;
-	private Long group;
+	private String group;
 
-	public StudentSearchParams(Long id, String email, String name, Integer number, Long group) {
+	public StudentSearchParams(Long id, String email, String name, Integer number, String group) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -48,11 +48,11 @@ public class StudentSearchParams {
 		this.number = number;
 	}
 
-	public Long getGroup() {
+	public String getGroup() {
 		return group;
 	}
 
-	public void setGroup(Long group) {
+	public void setGroup(String group) {
 		this.group = group;
 	}
 }

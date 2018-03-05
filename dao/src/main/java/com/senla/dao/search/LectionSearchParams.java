@@ -3,13 +3,23 @@ package com.senla.dao.search;
 public class LectionSearchParams {
 	private Long id;
 	private String name;
-	private Long pair;
+	private String pair;
+	private String course;
 
-	public LectionSearchParams(Long id, String name, Long pair) {
+	public String getCourse() {
+		return course;
+	}
+
+	public void setCourse(String course) {
+		this.course = course;
+	}
+
+	public LectionSearchParams(Long id, String name, String pair, String course) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.pair = pair;
+		this.course=course;
 	}
 
 	public Long getId() {
@@ -28,11 +38,11 @@ public class LectionSearchParams {
 		this.name = name;
 	}
 
-	public Long getPair() {
+	public String getPair() {
 		return pair;
 	}
 
-	public void setPair(Long pair) {
+	public void setPair(String pair) {
 		this.pair = pair;
 	}
 }

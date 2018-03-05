@@ -6,8 +6,8 @@ import com.senla.entity.Mark;
 
 public interface MarkDao extends AbstractDao<Mark>, Searchable<MarkSearchParams, Mark> {
 
-	void addPairToMark(Long idPair, Long idMark);
+	void cloneMarkToPair(Long idPair, Long idMark);
 
-	void addStudentToMark(Long idStudent, Long idMark);
+	void cloneMarkToStudent(Long idStudent, Long idMark);
 
 }

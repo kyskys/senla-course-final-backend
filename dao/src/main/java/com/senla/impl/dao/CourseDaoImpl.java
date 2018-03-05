@@ -1,7 +1,6 @@
 package com.senla.impl.dao;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.persistence.criteria.Predicate;
 
@@ -18,19 +17,18 @@ import com.senla.api.dao.CourseDao;
 import com.senla.dao.search.CourseSearchParams;
 import com.senla.dao.search.SortParam;
 import com.senla.entity.Course;
+import com.senla.entity.Course_;
 import com.senla.entity.Lection;
+import com.senla.entity.Lecturer_;
 
 @Repository
 public class CourseDaoImpl extends SearchableDaoImpl<CourseSearchParams, Course> implements CourseDao {
-	private static final String SORT_PARAM_ID = "id";
-	private static final String SORT_PARAM_NAME = "name";
-	private static final String SORT_PARAM_LECTURER = "lecturer";
 
 	@Override
 	protected void initSortMap() {
-		sortMap.put(SortParam.ID, SORT_PARAM_ID);
-		sortMap.put(SortParam.NAME, SORT_PARAM_NAME);
-		sortMap.put(SortParam.LECTURER_ID, SORT_PARAM_LECTURER);
+		sortMap.put(SortParam.ID, Course_.id);
+		sortMap.put(SortParam.NAME, Course_.name);
+		sortMap.put(SortParam.LECTURER_ID, Course_.lecturer);
 	}
 
 	public Class<Course> getGenericClass() {
@@ -69,13 +67,13 @@ public class CourseDaoImpl extends SearchableDaoImpl<CourseSearchParams, Course>
 	protected void applyFilters(CourseSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder, Root<Course> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		if (searchParam.getId() != null) {
-			predicates.add(builder.equal(root.get(SORT_PARAM_ID), searchParam.getId()));
+			predicates.add(builder.equal(root.get(Course_.id), searchParam.getId()));
 		}
 		if (searchParam.getName() != null) {
-			predicates.add(builder.like(root.get(SORT_PARAM_NAME), like(searchParam.getName())));
+			predicates.add(builder.like(root.get(Course_.name), like(searchParam.getName())));
 		}
 		if (searchParam.getLecturer() != null) {
-			predicates.add(builder.like(root.join(SORT_PARAM_LECTURER).get("name"), like(searchParam.getLecturer())));
+			predicates.add(builder.like(root.join(Course_.lecturer).get(Lecturer_.name), like(searchParam.getLecturer())));
 		}
 		query.where(predicates.toArray(new Predicate[predicates.size()]));
 	}

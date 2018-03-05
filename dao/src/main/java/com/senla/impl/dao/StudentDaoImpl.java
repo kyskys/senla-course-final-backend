@@ -1,23 +1,23 @@
 package com.senla.impl.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 import com.senla.api.dao.StudentDao;
 import com.senla.dao.search.SortParam;
 import com.senla.dao.search.StudentSearchParams;
+import com.senla.entity.Group_;
 import com.senla.entity.Student;
+import com.senla.entity.Student_;
 
 @Repository
 public class StudentDaoImpl extends SearchableDaoImpl<StudentSearchParams, Student> implements StudentDao {
-
-	private static final String SORT_PARAM_ID = "id";
-	private static final String SORT_PARAM_NAME = "name";
-	private static final String SORT_PARAM_EMAIL = "email";
-	private static final String SORT_PARAM_PHONE_NUMBER = "number";
-	private static final String SORT_PARAM_GROUP_ID = "group";
 
 	public Class<Student> getGenericClass() {
 		return Student.class;
@@ -25,32 +25,32 @@ public class StudentDaoImpl extends SearchableDaoImpl<StudentSearchParams, Stude
 
 	@Override
 	protected void initSortMap() {
-		sortMap.put(SortParam.ID, SORT_PARAM_ID);
-		sortMap.put(SortParam.NAME, SORT_PARAM_NAME);
-		sortMap.put(SortParam.EMAIL, SORT_PARAM_EMAIL);
-		sortMap.put(SortParam.PHONE_NUMBER, SORT_PARAM_PHONE_NUMBER);
-		sortMap.put(SortParam.GROUP_ID, SORT_PARAM_GROUP_ID);
+		sortMap.put(SortParam.ID, Student_.id);
+		sortMap.put(SortParam.NAME, Student_.name);
+		sortMap.put(SortParam.EMAIL, Student_.email);
+		sortMap.put(SortParam.PHONE_NUMBER, Student_.number);
+		sortMap.put(SortParam.GROUP_ID, Student_.group);
 	}
 
 	@Override
 	protected void applyFilters(StudentSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder,
 			Root<Student> root) {
+		List<Predicate> predicates = new ArrayList<Predicate>();
 		if (searchParam.getId() != null) {
-			query.where(builder.equal(root.get(SORT_PARAM_ID), searchParam.getId()));
+			predicates.add(builder.equal(root.get(Student_.id), searchParam.getId()));
 		}
 		if (searchParam.getName() != null) {
-			query.where(builder.like(root.get(SORT_PARAM_NAME), like(searchParam.getName())));
+			predicates.add(builder.like(root.get(Student_.name), like(searchParam.getName())));
 		}
 		if (searchParam.getEmail() != null) {
-			query.where(builder.like(root.get(SORT_PARAM_EMAIL), like(searchParam.getEmail())));
+			predicates.add(builder.like(root.get(Student_.email), like(searchParam.getEmail())));
 		}
 		if (searchParam.getNumber() != null) {
-			query.where(builder.equal(root.get(SORT_PARAM_PHONE_NUMBER), searchParam.getNumber()));
+			predicates.add(builder.equal(root.get(Student_.number), searchParam.getNumber()));
 		}
 		if (searchParam.getGroup() != null) {
-			query.where(builder.equal(root.get(SORT_PARAM_GROUP_ID), searchParam.getGroup()));
+			predicates.add(builder.like(root.join(Student_.group).get(Group_.name), like(searchParam.getGroup())));
 		}
+		query.where(predicates.toArray(new Predicate[predicates.size()]));
 	}
-
-
 }

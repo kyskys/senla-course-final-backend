@@ -6,6 +6,4 @@ import com.senla.entity.Pair;
 
 public interface PairDao extends AbstractDao<Pair>, Searchable<PairSearchParams, Pair> {
 
-	void addGroupToPair(Long idGroup, Long idPair);
-
 }

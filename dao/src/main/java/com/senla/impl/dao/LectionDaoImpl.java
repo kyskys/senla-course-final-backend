@@ -1,8 +1,12 @@
 package com.senla.impl.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
@@ -10,31 +14,24 @@ import org.springframework.stereotype.Repository;
 import com.senla.api.dao.LectionDao;
 import com.senla.dao.search.LectionSearchParams;
 import com.senla.dao.search.SortParam;
+import com.senla.entity.Course_;
 import com.senla.entity.Lection;
+import com.senla.entity.Lection_;
+import com.senla.entity.Pair_;
 
 @Repository
 public class LectionDaoImpl extends SearchableDaoImpl<LectionSearchParams, Lection> implements LectionDao {
-	private static final String SORT_PARAM_ID = "id";
-	private static final String SORT_PARAM_NAME = "name";
-	private static final String SORT_PARAM_PAIR_ID = "pair";
-
+	
 	public Class<Lection> getGenericClass() {
 		return Lection.class;
 	}
 
 	@Override
 	protected void initSortMap() {
-		sortMap.put(SortParam.ID, SORT_PARAM_ID);
-		sortMap.put(SortParam.NAME, SORT_PARAM_NAME);
-		sortMap.put(SortParam.PAIR_ID, SORT_PARAM_PAIR_ID);
-	}
-	
-	@Override
-	public void removeCourseFromLection(Long idLection) {
-		Session session = getSession();
-		Query query = session.createQuery("update Lection set course.id = null where id= :idLection");
-		query.setParameter("idLection", idLection);
-		query.executeUpdate();
+		sortMap.put(SortParam.ID, Lection_.id);
+		sortMap.put(SortParam.NAME, Lection_.name);
+		sortMap.put(SortParam.PAIR_ID, Lection_.pair);
+		sortMap.put(SortParam.COURSE_ID, Lection_.course);
 	}
 
 	@Override
@@ -42,15 +39,6 @@ public class LectionDaoImpl extends SearchableDaoImpl<LectionSearchParams, Lecti
 		Session session = getSession();
 		Query query = session.createQuery("update Lection set pair.id = null where id= :idLection");
 		query.setParameter("idLection", idLection);
-		query.executeUpdate();
-	}
-
-	@Override
-	public void addCourseToLection(Long idCourse, Long idLection) {
-		Session session = getSession();
-		Query query = session.createQuery("update Lection set course.id = :idCourse where id= :idLection");
-		query.setParameter("idLection", idLection);
-		query.setParameter("idCourse", idCourse);
 		query.executeUpdate();
 	}
 
@@ -66,15 +54,20 @@ public class LectionDaoImpl extends SearchableDaoImpl<LectionSearchParams, Lecti
 	@Override
 	protected void applyFilters(LectionSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder,
 			Root<Lection> root) {
+		List<Predicate> predicates = new ArrayList<Predicate>();
 		if (searchParam.getId() != null) {
-			query.where(builder.equal(root.get(SORT_PARAM_ID), searchParam.getId()));
+			predicates.add(builder.equal(root.get(Lection_.id), searchParam.getId()));
 		}
 		if (searchParam.getName() != null) {
-			query.where(builder.like(root.get(SORT_PARAM_NAME), like(searchParam.getName())));
+			predicates.add(builder.like(root.get(Lection_.name), like(searchParam.getName())));
 		}
 		if (searchParam.getPair() != null) {
-			query.where(builder.equal(root.get(SORT_PARAM_PAIR_ID), searchParam.getPair()));
+			predicates.add(builder.like(root.join(Lection_.pair).get(Pair_.name), like(searchParam.getPair())));
 		}
+		if (searchParam.getCourse() != null) {
+			predicates.add(builder.like(root.join(Lection_.course).get(Course_.name), like(searchParam.getCourse())));
+		}
+		query.where(predicates.toArray(new Predicate[predicates.size()]));
 	}
 
 }

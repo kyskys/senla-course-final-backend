@@ -35,20 +35,8 @@ public class LectionServiceImpl extends SearchableServiceImpl<LectionSearchParam
 
 	@Transactional
 	@Override
-	public void addCourseToLection(Long idCourse, Long idLection) {
-		lectionDao.addCourseToLection(idCourse, idLection);
-	}
-
-	@Transactional
-	@Override
 	public void removePairFromLection(Long idLection) {
 		lectionDao.removePairFromLection(idLection);
-	}
-
-	@Transactional
-	@Override
-	public void removeCourseFromLection(Long idLection) {
-		lectionDao.removeCourseFromLection(idLection);
 	}
 
 }

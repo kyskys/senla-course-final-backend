@@ -8,9 +8,6 @@ public interface LectionService extends AbstractService<Lection>, Searchable<Lec
 
 	void addPairToLection(Long idPair, Long idLection);
 
-	void addCourseToLection(Long idCourse, Long idLection);
-
 	void removePairFromLection(Long idLection);
 
-	void removeCourseFromLection(Long idLection);
 }

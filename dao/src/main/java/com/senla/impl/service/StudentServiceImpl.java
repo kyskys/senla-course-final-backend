@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import com.senla.api.dao.AbstractDao;
 import com.senla.api.dao.StudentDao;
 import com.senla.api.service.StudentService;
+import com.senla.dao.search.Searchable;
+import com.senla.dao.search.StudentSearchParams;
 import com.senla.entity.Student;
 
 @Service
-public class StudentServiceImpl extends AbstractServiceImpl<Student> implements StudentService {
+public class StudentServiceImpl extends SearchableServiceImpl<StudentSearchParams, Student> implements StudentService {
 
 	@Autowired
 	StudentDao studentDao;
@@ -20,13 +22,8 @@ public class StudentServiceImpl extends AbstractServiceImpl<Student> implements 
 	}
 
 	@Override
-	public void addGroupToStudent(Long idGroup, Long idStudent) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void removeGroupFromStudent(Long idGroup, Long idStudent) {
-		// TODO Auto-generated method stub
+	protected Searchable<StudentSearchParams, Student> getSearchableDao() {
+		return studentDao;
 	}
 
 }

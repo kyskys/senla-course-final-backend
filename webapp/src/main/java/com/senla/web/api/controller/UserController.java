@@ -4,4 +4,6 @@ import com.senla.web.dto.UserDetailsDto;
 
 public interface UserController {
 	UserDetailsDto getUserDetails();
+
+	String getUserName();
 }

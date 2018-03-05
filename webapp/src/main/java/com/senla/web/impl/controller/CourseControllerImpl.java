@@ -18,7 +18,6 @@ import com.senla.dao.search.SortParam;
 import com.senla.entity.Course;
 import com.senla.holder.support.CurrentUserSupport;
 import com.senla.web.api.controller.CourseController;
-import com.senla.web.dto.CourseDto;
 import com.senla.web.dto.CourseGetDto;
 import com.senla.web.dto.CourseLectionDto;
 import com.senla.web.dto.CourseUpdateDto;
@@ -85,9 +84,9 @@ public class CourseControllerImpl implements CourseController, CurrentUserSuppor
 	public List<CourseGetDto> search(@RequestParam(value = "sort", required = false) String sortBy,
 			@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name,
-			@RequestParam(value = "lecturer", required = false) String idLecturer, @RequestParam("limit") Integer limit,
+			@RequestParam(value = "lecturer", required = false) String lecturer, @RequestParam("limit") Integer limit,
 			@RequestParam("offset") Integer offset, @RequestParam("asc") boolean asc) {
-		CourseSearchParams searchParam = new CourseSearchParams(id, name, idLecturer);
+		CourseSearchParams searchParam = new CourseSearchParams(id, name, lecturer);
 		SortParam sortParam = SortParam.getValueOf(sortBy);
 		List<CourseGetDto> result = courseService.search(sortParam, searchParam, limit, offset, asc).stream()
 				.map(CourseGetDto::new).collect(Collectors.toList());
@@ -115,25 +114,12 @@ public class CourseControllerImpl implements CourseController, CurrentUserSuppor
 		//TODO dopisat vibor lekcii kyrsa
 	}
 
-	@RequestMapping(value = "/api/test", method = RequestMethod.GET, produces = "text/plain")
-	@Override
-	public String test() {
-		return "{\"message\":\"testss\"}";
-	}
-
-	@RequestMapping(value = "/api/tests", method = RequestMethod.GET, produces = "text/plain")
-	@Override
-	public String tests() {
-		return "{\"message\":\"testsssssss\"}";
-	}
-
 	@RequestMapping(value = "/api/course/count", method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public Long courseCount(@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name,
-			@RequestParam(value = "lecturer", required = false) String idLecturer) {
-		CourseSearchParams searchParam = new CourseSearchParams(id, name, idLecturer);
-		Long asd = courseService.count(searchParam);
-		return asd;
+			@RequestParam(value = "lecturer", required = false) String lecturer) {
+		CourseSearchParams searchParam = new CourseSearchParams(id, name, lecturer);
+		return courseService.count(searchParam);
 	}
 }

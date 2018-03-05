@@ -9,17 +9,24 @@ import org.springframework.transaction.annotation.Transactional;
 import com.senla.api.dao.AbstractDao;
 import com.senla.api.dao.LecturerDao;
 import com.senla.api.service.LecturerService;
+import com.senla.dao.search.LecturerSearchParams;
+import com.senla.dao.search.Searchable;
 import com.senla.entity.Course;
 import com.senla.entity.Lecturer;
 
 @Service
-public class LecturerServiceImpl extends AbstractServiceImpl<Lecturer> implements LecturerService {
+public class LecturerServiceImpl extends SearchableServiceImpl<LecturerSearchParams, Lecturer> implements LecturerService {
 
 	@Autowired
 	LecturerDao lecturerDao;
 	
 	@Override
 	protected AbstractDao<Lecturer> getDao() {
+		return lecturerDao;
+	}
+	
+	@Override
+	protected Searchable<LecturerSearchParams, Lecturer> getSearchableDao() {
 		return lecturerDao;
 	}
 
@@ -32,6 +39,6 @@ public class LecturerServiceImpl extends AbstractServiceImpl<Lecturer> implement
 	@Override
 	public List<Course> getCoursesByLecturerId(Long idLecturer) {
 		return lecturerDao.getCoursesByLecturerId(idLecturer);
-	}
+	}	
 
 }

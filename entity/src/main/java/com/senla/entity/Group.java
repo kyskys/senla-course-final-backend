@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "group")
+@Table(name = "groups")
 public class Group extends AbstractEntity {
 
 	@OneToMany(mappedBy = "group", fetch = FetchType.LAZY)

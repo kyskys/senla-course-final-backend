@@ -3,12 +3,13 @@ package com.senla.web.api.controller;
 import java.util.List;
 
 import com.senla.web.dto.GroupDto;
+import com.senla.web.dto.GroupGetDto;
 import com.senla.web.dto.GroupPairDto;
 import com.senla.web.dto.GroupStudentDto;
 import com.senla.web.dto.CreateGroupOrLectionDto;
 
 public interface GroupController {
-	GroupDto getGroup(Long id);
+	GroupGetDto getGroup(Long id);
 
 	void createGroup(CreateGroupOrLectionDto dto);
 
@@ -16,9 +17,9 @@ public interface GroupController {
 
 	void updateGroup(GroupDto dto, Long id);
 
-	List<GroupDto> getAllGroups();
+	List<GroupGetDto> getAllGroups();
 
-	List<GroupDto> search(String sortBy, Long id, String name, Integer limit, Integer offset, boolean asc);
+	List<GroupGetDto> search(String sortBy, Long id, String name, Integer limit, Integer offset, boolean asc);
 
 	List<GroupPairDto> getPairsByGroupId(Long idGroup);
 
@@ -31,6 +32,8 @@ public interface GroupController {
 	void addStudentToGroup(Long idStudent, Long idGroup);
 
 	void removeStudentFromGroup(Long idStudent);
+
+	Long groupCount(Long id, String name);
 
 
 }

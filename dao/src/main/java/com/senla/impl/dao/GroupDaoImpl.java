@@ -1,11 +1,13 @@
 package com.senla.impl.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
@@ -14,13 +16,12 @@ import com.senla.api.dao.GroupDao;
 import com.senla.dao.search.GroupSearchParams;
 import com.senla.dao.search.SortParam;
 import com.senla.entity.Group;
+import com.senla.entity.Group_;
 import com.senla.entity.Pair;
 import com.senla.entity.Student;
 
 @Repository
 public class GroupDaoImpl extends SearchableDaoImpl<GroupSearchParams, Group> implements GroupDao {
-	private static final String SORT_PARAM_ID = "id";
-	private static final String SORT_PARAM_NAME = "name";
 
 	public Class<Group> getGenericClass() {
 		return Group.class;
@@ -28,8 +29,8 @@ public class GroupDaoImpl extends SearchableDaoImpl<GroupSearchParams, Group> im
 
 	@Override
 	protected void initSortMap() {
-		sortMap.put(SortParam.ID, SORT_PARAM_ID);
-		sortMap.put(SortParam.NAME, SORT_PARAM_NAME);
+		sortMap.put(SortParam.ID, Group_.id);
+		sortMap.put(SortParam.NAME, Group_.name);
 	}
 
 	@Override
@@ -74,12 +75,14 @@ public class GroupDaoImpl extends SearchableDaoImpl<GroupSearchParams, Group> im
 	@Override
 	protected void applyFilters(GroupSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder,
 			Root<Group> root) {
+		List<Predicate> predicates = new ArrayList<Predicate>();
 		if (searchParam.getId() != null) {
-			query.where(builder.equal(root.get(SORT_PARAM_ID), searchParam.getId()));
+			predicates.add(builder.equal(root.get(Group_.id), searchParam.getId()));
 		}
 		if (searchParam.getName() != null) {
-			query.where(builder.like(root.get(SORT_PARAM_NAME), like(searchParam.getName())));
+			predicates.add(builder.like(root.get(Group_.name), like(searchParam.getName())));
 		}
+		query.where(predicates.toArray(new Predicate[predicates.size()]));
 	}
 
 }

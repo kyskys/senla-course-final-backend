@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.senla.api.service.GroupService;
 import com.senla.dao.search.GroupSearchParams;
@@ -17,17 +18,19 @@ import com.senla.entity.Group;
 import com.senla.web.api.controller.GroupController;
 import com.senla.web.dto.CreateGroupOrLectionDto;
 import com.senla.web.dto.GroupDto;
+import com.senla.web.dto.GroupGetDto;
 import com.senla.web.dto.GroupPairDto;
 import com.senla.web.dto.GroupStudentDto;
 
+@RestController
 public class GroupControllerImpl implements GroupController {
 	@Autowired
 	GroupService groupService;
 
 	@RequestMapping(value = "/api/group/{id}", method = RequestMethod.GET, produces = "application/json")
 	@Override
-	public GroupDto getGroup(@PathVariable("id") Long id) {
-		return new GroupDto(groupService.get(id));
+	public GroupGetDto getGroup(@PathVariable("id") Long id) {
+		return new GroupGetDto(groupService.get(id));
 	}
 
 	@RequestMapping(value = "/api/group/", method = RequestMethod.PUT)
@@ -63,21 +66,30 @@ public class GroupControllerImpl implements GroupController {
 
 	@RequestMapping(value = "/api/group/", method = RequestMethod.GET, produces = "application/json")
 	@Override
-	public List<GroupDto> getAllGroups() {
-		return groupService.getAll().stream().map(GroupDto::new).collect(Collectors.toList());
+	public List<GroupGetDto> getAllGroups() {
+		return groupService.getAll().stream().map(GroupGetDto::new).collect(Collectors.toList());
 	}
 
 	@RequestMapping(value = "/api/group/search", method = RequestMethod.GET, produces = "application/json")
 	@Override
-	public List<GroupDto> search(@RequestParam(value = "sort", required = false) String sortBy,
+	public List<GroupGetDto> search(@RequestParam(value = "sort", required = false) String sortBy,
 			@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name, @RequestParam("limit") Integer limit,
 			@RequestParam("offset") Integer offset, @RequestParam("asc") boolean asc) {
 		GroupSearchParams searchParam = new GroupSearchParams(id, name);
 		SortParam sortParam = SortParam.getValueOf(sortBy);
-		List<GroupDto> result = groupService.search(sortParam, searchParam, limit, offset, asc).stream().map(GroupDto::new)
+		List<GroupGetDto> result = groupService.search(sortParam, searchParam, limit, offset, asc).stream().map(GroupGetDto::new)
 				.collect(Collectors.toList());
 		return result;
+	}
+	
+	@RequestMapping(value = "/api/group/count", method = RequestMethod.GET, produces = "application/json")
+	@Override
+	public Long groupCount(
+			@RequestParam(value = "id", required = false) Long id,
+			@RequestParam(value = "name", required = false) String name) {
+		GroupSearchParams searchParam = new GroupSearchParams(id, name);
+		return groupService.count(searchParam);
 	}
 
 	@RequestMapping(value = "/api/group/{id}/pair/", method = RequestMethod.GET, produces = "application/json")

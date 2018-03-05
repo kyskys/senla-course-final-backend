@@ -2,10 +2,10 @@ package com.senla.dao.search;
 
 public class MarkSearchParams {
 	private Long id;
-	private Long pair;
-	private Long student;
+	private String pair;
+	private String student;
 
-	public MarkSearchParams(Long id, Long pair, Long student) {
+	public MarkSearchParams(Long id, String pair, String student) {
 		super();
 		this.id = id;
 		this.pair = pair;
@@ -20,19 +20,19 @@ public class MarkSearchParams {
 		this.id = id;
 	}
 
-	public Long getPair() {
+	public String getPair() {
 		return pair;
 	}
 
-	public void setPair(Long pair) {
+	public void setPair(String pair) {
 		this.pair = pair;
 	}
 
-	public Long getStudent() {
+	public String getStudent() {
 		return student;
 	}
 
-	public void setStudent(Long student) {
+	public void setStudent(String student) {
 		this.student = student;
 	}
 }

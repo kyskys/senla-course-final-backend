@@ -25,6 +25,9 @@ public class Pair extends AbstractEntity {
 	@JoinColumn(name = "pair_time_id")
 	private PairTime time;
 
+	@Column(name="name")
+	private String name;
+
 	@Column(name = "date")
 	private LocalDateTime date;
 
@@ -72,5 +75,13 @@ public class Pair extends AbstractEntity {
 
 	public void setTime(PairTime time) {
 		this.time = time;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }
