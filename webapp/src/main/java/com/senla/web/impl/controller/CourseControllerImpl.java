@@ -24,20 +24,20 @@ import com.senla.web.dto.CourseUpdateDto;
 import com.senla.web.dto.CreateCourseDto;
 
 @RestController
-@RequestMapping(value = "/api/course/{id}/", method = RequestMethod.GET, produces = "application/json")
+@RequestMapping(value = "/api/course/")
 public class CourseControllerImpl implements CourseController, CurrentUserSupport {
 	@Autowired
 	CourseService courseService;
 	@Autowired
 	LecturerService lecturerService;
 
-	@RequestMapping(value = "/api/course/{id}/", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{id}/", method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public CourseGetDto getCourse(@PathVariable("id") Long id) {
 		return new CourseGetDto(courseService.get(id));
 	}
 
-	@RequestMapping(value = "/api/course/", method = RequestMethod.PUT)
+	@RequestMapping(method = RequestMethod.PUT)
 	@Override
 	public CourseGetDto createCourse(@RequestBody CreateCourseDto dto) {
 		Course course = new Course();
@@ -47,7 +47,7 @@ public class CourseControllerImpl implements CourseController, CurrentUserSuppor
 		return new CourseGetDto(courseService.create(course));
 	}
 
-	@RequestMapping(value = "/api/course/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	@Override
 	public void deleteCourse(@PathVariable("id") Long id) {
 		Course course = new Course();
@@ -55,7 +55,7 @@ public class CourseControllerImpl implements CourseController, CurrentUserSuppor
 		courseService.delete(course);
 	}
 
-	@RequestMapping(value = "/api/course/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "{id}", method = RequestMethod.POST)
 	@Override
 	public void updateCourse(@RequestBody CourseUpdateDto dto, @PathVariable("id") Long id) {
 		Course course = new Course();
@@ -74,13 +74,13 @@ public class CourseControllerImpl implements CourseController, CurrentUserSuppor
 		courseService.update(course);
 	}
 
-	@RequestMapping(value = "/api/course/", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public List<CourseGetDto> getAllCourses() {
 		return courseService.getAll().stream().map(CourseGetDto::new).collect(Collectors.toList());
 	}
 
-	@RequestMapping(value = "/api/course/search", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "search", method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public List<CourseGetDto> search(@RequestParam(value = "sort", required = false) String sortBy,
 			@RequestParam(value = "id", required = false) Long id,
@@ -94,19 +94,19 @@ public class CourseControllerImpl implements CourseController, CurrentUserSuppor
 		return result;
 	}
 
-	@RequestMapping(value = "/api/course/{course}/add/lection/{lection}", method = RequestMethod.POST)
+	@RequestMapping(value = "{course}/add/lection/{lection}", method = RequestMethod.POST)
 	@Override
 	public void addLectionToCourse(@PathVariable("lection") Long idLection, @PathVariable("course") Long idCourse) {
 		courseService.addLectionToCourse(idLection, idCourse);
 	}
 
-	@RequestMapping(value = "/api/course/{course}/remove/lection/{lection}", method = RequestMethod.POST)
+	@RequestMapping(value = "{course}/remove/lection/{lection}", method = RequestMethod.POST)
 	@Override
 	public void removeLectionFromCourse(@PathVariable("lection") Long idLection) {
 		courseService.removeLectionFromCourse(idLection);
 	}
 
-	@RequestMapping(value = "/api/course/{id}/lection/", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{id}/lection/", method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public List<CourseLectionDto> getLectionsByCourseId(@PathVariable("id") Long idCourse,
 			@RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
@@ -115,7 +115,7 @@ public class CourseControllerImpl implements CourseController, CurrentUserSuppor
 		//TODO dopisat vibor lekcii kyrsa
 	}
 
-	@RequestMapping(value = "/api/course/count", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "count", method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public Long courseCount(@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name,
