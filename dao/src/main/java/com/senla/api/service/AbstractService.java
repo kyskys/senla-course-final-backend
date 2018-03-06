@@ -6,7 +6,7 @@ import com.senla.entity.AbstractEntity;
 
 public interface AbstractService<T extends AbstractEntity> {
 
-	void create(T entity);
+	T create(T entity);
 
 	void delete(T entity);
 

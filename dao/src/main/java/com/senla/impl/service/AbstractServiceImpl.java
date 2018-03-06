@@ -14,8 +14,8 @@ public abstract class AbstractServiceImpl<T extends AbstractEntity> implements A
 
 	@Transactional
 	@Override
-	public void create(T entity) {
-		getDao().create(entity);
+	public T create(T entity) {
+		return getDao().create(entity);
 	}
 
 	@Transactional

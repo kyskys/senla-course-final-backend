@@ -27,8 +27,9 @@ public abstract class AbstractDaoImpl<T extends AbstractEntity> implements Abstr
 	}
 
 	@Override
-	public void create(T entity) {
+	public T create(T entity) {
 		getSession().save(entity);
+		return entity;
 	}
 
 	@Override

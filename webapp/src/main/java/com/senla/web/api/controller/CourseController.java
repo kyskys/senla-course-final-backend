@@ -10,7 +10,7 @@ import com.senla.web.dto.CreateCourseDto;
 public interface CourseController {
 	CourseGetDto getCourse(Long id);
 
-	void createCourse(CreateCourseDto dto);
+	CourseGetDto createCourse(CreateCourseDto dto);
 
 	void deleteCourse(Long id);
 

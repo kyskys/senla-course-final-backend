@@ -8,7 +8,7 @@ public interface AbstractDao<T extends AbstractEntity> {
 
 	Class<T> getGenericClass();
 
-	void create(T entity);
+	T create(T entity);
 
 	void delete(T entity);
 

@@ -24,6 +24,7 @@ import com.senla.web.dto.CourseUpdateDto;
 import com.senla.web.dto.CreateCourseDto;
 
 @RestController
+@RequestMapping(value = "/api/course/{id}/", method = RequestMethod.GET, produces = "application/json")
 public class CourseControllerImpl implements CourseController, CurrentUserSupport {
 	@Autowired
 	CourseService courseService;
@@ -38,12 +39,12 @@ public class CourseControllerImpl implements CourseController, CurrentUserSuppor
 
 	@RequestMapping(value = "/api/course/", method = RequestMethod.PUT)
 	@Override
-	public void createCourse(@RequestBody CreateCourseDto dto) {
+	public CourseGetDto createCourse(@RequestBody CreateCourseDto dto) {
 		Course course = new Course();
 		course.setLecturer(lecturerService.get(getCurrentUser().getId()));
 		course.setName(dto.getName());
 		course.setDescription(dto.getDescription());
-		courseService.create(course);
+		return new CourseGetDto(courseService.create(course));
 	}
 
 	@RequestMapping(value = "/api/course/{id}", method = RequestMethod.DELETE)
