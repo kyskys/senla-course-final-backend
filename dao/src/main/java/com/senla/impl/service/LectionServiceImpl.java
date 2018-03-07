@@ -11,6 +11,7 @@ import com.senla.dao.search.LectionSearchParams;
 import com.senla.dao.search.Searchable;
 import com.senla.entity.Lection;
 
+@Transactional
 @Service
 public class LectionServiceImpl extends SearchableServiceImpl<LectionSearchParams, Lection> implements LectionService {
 
@@ -27,13 +28,11 @@ public class LectionServiceImpl extends SearchableServiceImpl<LectionSearchParam
 		return lectionDao;
 	}
 
-	@Transactional
 	@Override
 	public void addPairToLection(Long idPair, Long idLection) {
 		lectionDao.addPairToLection(idPair, idLection);
 	}
 
-	@Transactional
 	@Override
 	public void removePairFromLection(Long idLection) {
 		lectionDao.removePairFromLection(idLection);

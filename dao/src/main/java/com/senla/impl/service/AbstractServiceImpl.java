@@ -8,23 +8,21 @@ import com.senla.api.dao.AbstractDao;
 import com.senla.api.service.AbstractService;
 import com.senla.entity.AbstractEntity;
 
+@Transactional
 public abstract class AbstractServiceImpl<T extends AbstractEntity> implements AbstractService<T> {
 
 	protected abstract AbstractDao<T> getDao();
 
-	@Transactional
 	@Override
 	public T create(T entity) {
 		return getDao().create(entity);
 	}
 
-	@Transactional
 	@Override
 	public void delete(T entity) {
 		getDao().delete(entity);
 	}
 
-	@Transactional
 	@Override
 	public void update(T entity) {
 		getDao().update(entity);

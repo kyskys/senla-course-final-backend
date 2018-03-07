@@ -14,6 +14,7 @@ import com.senla.dao.search.Searchable;
 import com.senla.entity.Course;
 import com.senla.entity.Lection;
 
+@Transactional
 @Service
 public class CourseServiceImpl extends SearchableServiceImpl<CourseSearchParams, Course> implements CourseService {
 
@@ -30,13 +31,11 @@ public class CourseServiceImpl extends SearchableServiceImpl<CourseSearchParams,
 		return courseDao;
 	}
 
-	@Transactional
 	@Override
 	public void addLectionToCourse(Long idLection, Long idCourse) {
 		courseDao.addLectionToCourse(idLection, idCourse);
 	}
 
-	@Transactional
 	@Override
 	public void removeLectionFromCourse(Long idLection) {
 		courseDao.removeLectionFromCourse(idLection);

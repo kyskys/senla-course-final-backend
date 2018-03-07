@@ -16,6 +16,7 @@ import com.senla.entity.Group;
 import com.senla.entity.Pair;
 import com.senla.entity.Student;
 
+@Transactional
 @Service
 public class GroupServiceImpl extends SearchableServiceImpl<GroupSearchParams, Group> implements GroupService {
 
@@ -34,7 +35,6 @@ public class GroupServiceImpl extends SearchableServiceImpl<GroupSearchParams, G
 		return groupDao;
 	}
 
-	@Transactional
 	@Override
 	public void addPairToGroup(Long idPair, Long idGroup) {
 		Group group = groupDao.get(idGroup);
@@ -43,7 +43,6 @@ public class GroupServiceImpl extends SearchableServiceImpl<GroupSearchParams, G
 		groupDao.update(group);
 	}
 
-	@Transactional
 	@Override
 	public void removePairFromGroup(Long idPair, Long idGroup) {
 		Group group = groupDao.get(idGroup);
@@ -52,13 +51,11 @@ public class GroupServiceImpl extends SearchableServiceImpl<GroupSearchParams, G
 		groupDao.update(group);
 	}
 
-	@Transactional
 	@Override
 	public void addStudentToGroup(Long idStudent, Long idGroup) {
 		groupDao.addStudentToGroup(idStudent, idGroup);
 	}
 
-	@Transactional
 	@Override
 	public void removeStudentFromGroup(Long idStudent) {
 		groupDao.removeStudentFromGroup(idStudent);

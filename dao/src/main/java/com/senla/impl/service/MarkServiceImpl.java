@@ -2,6 +2,7 @@ package com.senla.impl.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.senla.api.dao.AbstractDao;
 import com.senla.api.dao.MarkDao;
@@ -10,6 +11,7 @@ import com.senla.dao.search.MarkSearchParams;
 import com.senla.dao.search.Searchable;
 import com.senla.entity.Mark;
 
+@Transactional
 @Service
 public class MarkServiceImpl extends SearchableServiceImpl<MarkSearchParams, Mark> implements MarkService {
 

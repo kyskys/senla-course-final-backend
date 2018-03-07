@@ -2,10 +2,13 @@ package com.senla.impl.service;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.senla.dao.search.Searchable;
 import com.senla.dao.search.SortParam;
 import com.senla.entity.AbstractEntity;
 
+@Transactional
 public abstract class SearchableServiceImpl<T, R extends AbstractEntity> extends AbstractServiceImpl<R>
 		implements Searchable<T, R> {
 

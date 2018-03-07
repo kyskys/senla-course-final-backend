@@ -14,6 +14,7 @@ import com.senla.dao.search.Searchable;
 import com.senla.entity.Course;
 import com.senla.entity.Lecturer;
 
+@Transactional
 @Service
 public class LecturerServiceImpl extends SearchableServiceImpl<LecturerSearchParams, Lecturer> implements LecturerService {
 
@@ -30,7 +31,6 @@ public class LecturerServiceImpl extends SearchableServiceImpl<LecturerSearchPar
 		return lecturerDao;
 	}
 
-	@Transactional
 	@Override
 	public void addCourseToLecturer(Long idCourse, Long idLecturer) {
 		lecturerDao.addCourseToLecturer(idCourse, idLecturer);

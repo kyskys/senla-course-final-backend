@@ -58,18 +58,24 @@ public class CourseControllerImpl implements CourseController, CurrentUserSuppor
 	@RequestMapping(value = "{id}", method = RequestMethod.POST)
 	@Override
 	public void updateCourse(@RequestBody CourseUpdateDto dto, @PathVariable("id") Long id) {
-		Course course = new Course();
-		course.setId(id);
-		course.setName(dto.getName());
-		course.setDescription(dto.getDescription());
+		Course course = courseService.get(id);
+		String name = dto.getName();
+		if(name!=null) {
+			course.setName(name);
+		}
+		String description = dto.getDescription();
+		if(description!=null) {
+			course.setDescription(description);
+		}
 		List<Long> lections = dto.getLections();
 		if (lections != null) {
 			for (Long idLection : lections) {
 				courseService.addLectionToCourse(idLection, id);
 			}
 		}
-		if (dto.getLecturer() != null) {
-			course.setLecturer(lecturerService.get(dto.getLecturer()));
+		Long lecturer = dto.getLecturer();
+		if(lecturer!=null) {
+			course.setLecturer(lecturerService.get(lecturer));
 		}
 		courseService.update(course);
 	}
