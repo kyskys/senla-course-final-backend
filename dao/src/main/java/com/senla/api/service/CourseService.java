@@ -14,4 +14,6 @@ public interface CourseService extends AbstractService<Course>, Searchable<Cours
 
 	List<Lection> getLectionsByCourseId(Long idCourse);
 
+	void addlectionsToCourse(Long idCourse, List<Long> lections);
+
 }

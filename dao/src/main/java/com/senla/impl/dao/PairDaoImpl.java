@@ -45,7 +45,7 @@ public class PairDaoImpl extends SearchableDaoImpl<PairSearchParams, Pair> imple
 	}*/
 
 	@Override
-	protected void applyFilters(PairSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder,
+	protected void applyBasicFilters(PairSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder,
 			Root<Pair> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		if (searchParam.getId() != null) {

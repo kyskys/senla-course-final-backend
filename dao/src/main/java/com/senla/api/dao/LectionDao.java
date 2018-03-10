@@ -1,7 +1,10 @@
 package com.senla.api.dao;
 
+import java.util.List;
+
 import com.senla.dao.search.LectionSearchParams;
 import com.senla.dao.search.Searchable;
+import com.senla.dao.search.SortParam;
 import com.senla.entity.Lection;
 
 public interface LectionDao extends AbstractDao<Lection>, Searchable<LectionSearchParams, Lection> {
@@ -9,5 +12,9 @@ public interface LectionDao extends AbstractDao<Lection>, Searchable<LectionSear
 	void removePairFromLection(Long idLection);
 
 	void addPairToLection(Long idPair, Long idLection);
+
+	List<Lection> getLectionsByCourseId(Long idCourse);
+
+	List<Lection> getLectionsWithoutCourse();
 
 }

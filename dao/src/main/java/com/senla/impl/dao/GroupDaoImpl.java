@@ -73,7 +73,7 @@ public class GroupDaoImpl extends SearchableDaoImpl<GroupSearchParams, Group> im
 	}
 
 	@Override
-	protected void applyFilters(GroupSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder,
+	protected void applyBasicFilters(GroupSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder,
 			Root<Group> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		if (searchParam.getId() != null) {

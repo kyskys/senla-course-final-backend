@@ -55,7 +55,7 @@ public class LecturerDaoImpl extends SearchableDaoImpl<LecturerSearchParams, Lec
 	}
 
 	@Override
-	protected void applyFilters(LecturerSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder,
+	protected void applyBasicFilters(LecturerSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder,
 			Root<Lecturer> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		if (searchParam.getId() != null) {

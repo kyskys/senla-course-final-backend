@@ -27,6 +27,13 @@ public abstract class SearchableDaoImpl<R, T extends AbstractEntity> extends Abs
 		initSortMap();
 	}
 
+	
+	@FunctionalInterface
+	public interface AnotherFilter<Q> {
+		void applyFilter(Root<Q> root, CriteriaBuilder builder, CriteriaQuery<?> query);
+	}
+	
+	
 	protected Map<SortParam, SingularAttribute> sortMap;
 
 	protected abstract void initSortMap();
@@ -50,7 +57,7 @@ public abstract class SearchableDaoImpl<R, T extends AbstractEntity> extends Abs
 		CriteriaQuery<Long> query = builder.createQuery(Long.class);
 		Root<T> root = query.from(getGenericClass());
 		query.select(builder.count(root));
-		applyFilters(searchParam, query, builder, root);
+		applyBasicFilters(searchParam, query, builder, root);
 		TypedQuery<Long> result = session.createQuery(query);
 		return result.getSingleResult();
 	}
@@ -63,7 +70,21 @@ public abstract class SearchableDaoImpl<R, T extends AbstractEntity> extends Abs
 		CriteriaQuery<T> query = builder.createQuery(getGenericClass());
 		Root<T> root = query.from(getGenericClass());
 		query.select(root);
-		applyFilters(searchParam, query, builder, root);
+		applyBasicFilters(searchParam, query, builder, root);
+		SingularAttribute param = sortMap.get(sortParam);
+		orderQuery(root.get(param != null ? param : getDefSortValue()), builder, query, asc);
+		TypedQuery<T> result = session.createQuery(query).setMaxResults(limit).setFirstResult(offset);
+		return result.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<T> searchWithAnotherFilter(SortParam sortParam, R searchParam, int limit, int offset, boolean asc,AnotherFilter<T> filter) {
+		Session session = getSession();
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<T> query = builder.createQuery(getGenericClass());
+		Root<T> root = query.from(getGenericClass());
+		query.select(root);
+		filter.applyFilter(root, builder, query);
 		SingularAttribute param = sortMap.get(sortParam);
 		orderQuery(root.get(param != null ? param : getDefSortValue()), builder, query, asc);
 		TypedQuery<T> result = session.createQuery(query).setMaxResults(limit).setFirstResult(offset);
@@ -74,5 +95,5 @@ public abstract class SearchableDaoImpl<R, T extends AbstractEntity> extends Abs
 		return AbstractEntity_.id;
 	}
 
-	protected abstract void applyFilters(R searchParam, CriteriaQuery<?> query, CriteriaBuilder builder, Root<T> root);
+	protected abstract void applyBasicFilters(R searchParam, CriteriaQuery<?> query, CriteriaBuilder builder, Root<T> root);
 }

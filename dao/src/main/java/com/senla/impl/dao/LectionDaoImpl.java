@@ -21,7 +21,7 @@ import com.senla.entity.Pair_;
 
 @Repository
 public class LectionDaoImpl extends SearchableDaoImpl<LectionSearchParams, Lection> implements LectionDao {
-	
+
 	public Class<Lection> getGenericClass() {
 		return Lection.class;
 	}
@@ -52,7 +52,7 @@ public class LectionDaoImpl extends SearchableDaoImpl<LectionSearchParams, Lecti
 	}
 
 	@Override
-	protected void applyFilters(LectionSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder,
+	protected void applyBasicFilters(LectionSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder,
 			Root<Lection> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		if (searchParam.getId() != null) {
@@ -68,6 +68,24 @@ public class LectionDaoImpl extends SearchableDaoImpl<LectionSearchParams, Lecti
 			predicates.add(builder.like(root.join(Lection_.course).get(Course_.name), like(searchParam.getCourse())));
 		}
 		query.where(predicates.toArray(new Predicate[predicates.size()]));
+	}
+
+	@Override
+	public List<Lection> getLectionsByCourseId(Long idCourse) {
+		List<Lection> result = searchWithAnotherFilter(null, null, -1, 0, true, (root, builder, query) -> {
+			if (idCourse != null) {
+				query.where(builder.equal(root.join(Lection_.course).get(Course_.id), idCourse));
+			}
+		});
+		return result;
+	}
+
+	@Override
+	public List<Lection> getLectionsWithoutCourse() {
+		List<Lection> result = searchWithAnotherFilter(null, null, -1, 0, true, (root, builder, query) -> {
+			query.where(builder.isNull(root.get(Lection_.course)));
+		});
+		return result;
 	}
 
 }

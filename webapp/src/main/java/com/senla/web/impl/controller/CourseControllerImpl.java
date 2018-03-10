@@ -17,7 +17,6 @@ import com.senla.dao.search.CourseSearchParams;
 import com.senla.dao.search.SortParam;
 import com.senla.entity.Course;
 import com.senla.holder.support.CurrentUserSupport;
-import com.senla.web.api.controller.CourseController;
 import com.senla.web.dto.CourseGetDto;
 import com.senla.web.dto.CourseLectionDto;
 import com.senla.web.dto.CourseUpdateDto;
@@ -25,20 +24,18 @@ import com.senla.web.dto.CreateCourseDto;
 
 @RestController
 @RequestMapping(value = "/api/course/")
-public class CourseControllerImpl implements CourseController, CurrentUserSupport {
+public class CourseControllerImpl implements CurrentUserSupport {
 	@Autowired
 	CourseService courseService;
 	@Autowired
 	LecturerService lecturerService;
 
 	@RequestMapping(value = "{id}/", method = RequestMethod.GET, produces = "application/json")
-	@Override
 	public CourseGetDto getCourse(@PathVariable("id") Long id) {
 		return new CourseGetDto(courseService.get(id));
 	}
 
 	@RequestMapping(method = RequestMethod.PUT)
-	@Override
 	public CourseGetDto createCourse(@RequestBody CreateCourseDto dto) {
 		Course course = new Course();
 		course.setLecturer(lecturerService.get(getCurrentUser().getId()));
@@ -48,7 +45,6 @@ public class CourseControllerImpl implements CourseController, CurrentUserSuppor
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-	@Override
 	public void deleteCourse(@PathVariable("id") Long id) {
 		Course course = new Course();
 		course.setId(id);
@@ -56,7 +52,6 @@ public class CourseControllerImpl implements CourseController, CurrentUserSuppor
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.POST)
-	@Override
 	public void updateCourse(@RequestBody CourseUpdateDto dto, @PathVariable("id") Long id) {
 		Course course = courseService.get(id);
 		String name = dto.getName();
@@ -81,13 +76,11 @@ public class CourseControllerImpl implements CourseController, CurrentUserSuppor
 	}
 
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
-	@Override
 	public List<CourseGetDto> getAllCourses() {
 		return courseService.getAll().stream().map(CourseGetDto::new).collect(Collectors.toList());
 	}
 
 	@RequestMapping(value = "search", method = RequestMethod.GET, produces = "application/json")
-	@Override
 	public List<CourseGetDto> search(@RequestParam(value = "sort", required = false) String sortBy,
 			@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name,
@@ -101,19 +94,16 @@ public class CourseControllerImpl implements CourseController, CurrentUserSuppor
 	}
 
 	@RequestMapping(value = "{course}/add/lection/{lection}", method = RequestMethod.POST)
-	@Override
 	public void addLectionToCourse(@PathVariable("lection") Long idLection, @PathVariable("course") Long idCourse) {
 		courseService.addLectionToCourse(idLection, idCourse);
 	}
 
 	@RequestMapping(value = "{course}/remove/lection/{lection}", method = RequestMethod.POST)
-	@Override
 	public void removeLectionFromCourse(@PathVariable("lection") Long idLection) {
 		courseService.removeLectionFromCourse(idLection);
 	}
 
 	@RequestMapping(value = "{id}/lection/", method = RequestMethod.GET, produces = "application/json")
-	@Override
 	public List<CourseLectionDto> getLectionsByCourseId(@PathVariable("id") Long idCourse,
 			@RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
 		return courseService.getLectionsByCourseId(idCourse).stream().map(CourseLectionDto::new)
@@ -122,11 +112,15 @@ public class CourseControllerImpl implements CourseController, CurrentUserSuppor
 	}
 
 	@RequestMapping(value = "count", method = RequestMethod.GET, produces = "application/json")
-	@Override
 	public Long courseCount(@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name,
 			@RequestParam(value = "lecturer", required = false) String lecturer) {
 		CourseSearchParams searchParam = new CourseSearchParams(id, name, lecturer);
 		return courseService.count(searchParam);
+	}
+	
+	@RequestMapping(value="{id}/add/lection", method=RequestMethod.POST)
+	public void addLectionsToCourse(@PathVariable("id") Long idCourse, @RequestBody List<Long> lections) {
+		courseService.addlectionsToCourse(idCourse, lections);
 	}
 }

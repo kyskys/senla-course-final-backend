@@ -16,43 +16,39 @@ import com.senla.api.service.LectionService;
 import com.senla.dao.search.LectionSearchParams;
 import com.senla.dao.search.SortParam;
 import com.senla.entity.Lection;
-import com.senla.web.api.controller.LectionController;
 import com.senla.web.dto.CreateGroupOrLectionDto;
 import com.senla.web.dto.LectionDto;
 import com.senla.web.dto.LectionGetDto;
 
 @RestController
-public class LectionControllerImpl implements LectionController {
+@RequestMapping("/api/lection/")
+public class LectionControllerImpl {
 
 	@Autowired
 	LectionService lectionService;
 	@Autowired
 	CourseService courseService;
 
-	@RequestMapping(value = "/api/lection/{id}/", method = RequestMethod.GET, produces = "application/json")
-	@Override
+	@RequestMapping(value = "{id}/", method = RequestMethod.GET, produces = "application/json")
 	public LectionDto getLection(@PathVariable("id") Long id) {
 		return new LectionDto(lectionService.get(id));
 	}
 
-	@RequestMapping(value = "/api/lection/", method = RequestMethod.PUT)
-	@Override
+	@RequestMapping(value = "", method = RequestMethod.PUT)
 	public void createLection(@RequestBody CreateGroupOrLectionDto dto) {
 		Lection lection = new Lection();
 		lection.setName(dto.getName());
 		lectionService.create(lection);
 	}
 
-	@RequestMapping(value = "/api/lection/{id}", method = RequestMethod.DELETE)
-	@Override
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public void deleteLection(@PathVariable("id") Long id) {
 		Lection lection = new Lection();
 		lection.setId(id);
 		lectionService.delete(lection);
 	}
 
-	@RequestMapping(value = "/api/lection/{id}", method = RequestMethod.POST)
-	@Override
+	@RequestMapping(value = "{id}", method = RequestMethod.POST)
 	public void updateLection(LectionDto dto, @PathVariable("id") Long id) {
 		Lection lection = new Lection();
 		lection.setId(id);
@@ -68,14 +64,12 @@ public class LectionControllerImpl implements LectionController {
 		lectionService.update(lection);
 	}
 
-	@RequestMapping(value = "/api/lection/", method = RequestMethod.GET, produces = "application/json")
-	@Override
+	@RequestMapping(value = "", method = RequestMethod.GET, produces = "application/json")
 	public List<LectionDto> getAllLections() {
 		return lectionService.getAll().stream().map(LectionDto::new).collect(Collectors.toList());
 	}
 
-	@RequestMapping(value = "/api/lection/search", method = RequestMethod.GET, produces = "application/json")
-	@Override
+	@RequestMapping(value = "search", method = RequestMethod.GET, produces = "application/json")
 	public List<LectionGetDto> search(@RequestParam(value = "sort", required = false) String sortBy,
 			@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name,
@@ -89,8 +83,7 @@ public class LectionControllerImpl implements LectionController {
 		return result;
 	}
 
-	@RequestMapping(value = "/api/lection/count", method = RequestMethod.GET, produces = "application/json")
-	@Override
+	@RequestMapping(value = "count", method = RequestMethod.GET, produces = "application/json")
 	public Long lectionCount(@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name,
 			@RequestParam(value = "course", required = false) String course,
@@ -98,16 +91,28 @@ public class LectionControllerImpl implements LectionController {
 		LectionSearchParams searchParam = new LectionSearchParams(id, name, pair, course);
 		return lectionService.count(searchParam);
 	}
-	
-	@RequestMapping(value = "/api/lection/{lection}/remove", method = RequestMethod.POST)
-	@Override
+
+	@RequestMapping(value = "{lection}/remove", method = RequestMethod.POST)
 	public void removePairFromLection(@PathVariable("lection") Long idLection) {
 		lectionService.removePairFromLection(idLection);
 	}
 
-	@RequestMapping(value = "/api/lection/{lection}/add/pair/{pair}", method = RequestMethod.POST)
-	@Override
+	@RequestMapping(value = "{lection}/add/pair/{pair}", method = RequestMethod.POST)
 	public void addPairToLection(@PathVariable("pair") Long idPair, @PathVariable("lection") Long idLection) {
 		lectionService.addPairToLection(idPair, idLection);
+	}
+
+	@RequestMapping(value = "course/{course}", method = RequestMethod.GET)
+	public List<LectionGetDto> getLectionsByCourseId(@PathVariable("course") Long idCourse) {
+		List<LectionGetDto> result = lectionService.getLectionsByCourseId(idCourse).stream()
+				.map(LectionGetDto::new).collect(Collectors.toList());
+		return result;
+	}
+	
+	@RequestMapping(value = "course/", method = RequestMethod.GET)
+	public List<LectionGetDto> getLectionsWithoutCourse() {
+		List<LectionGetDto> result = lectionService.getLectionsWithoutCourse().stream()
+				.map(LectionGetDto::new).collect(Collectors.toList());
+		return result;
 	}
 }

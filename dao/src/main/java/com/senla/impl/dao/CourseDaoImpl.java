@@ -64,7 +64,7 @@ public class CourseDaoImpl extends SearchableDaoImpl<CourseSearchParams, Course>
 	}
 
 	@Override
-	protected void applyFilters(CourseSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder, Root<Course> root) {
+	protected void applyBasicFilters(CourseSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder, Root<Course> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		if (searchParam.getId() != null) {
 			predicates.add(builder.equal(root.get(Course_.id), searchParam.getId()));

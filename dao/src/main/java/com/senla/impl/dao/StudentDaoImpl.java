@@ -33,7 +33,7 @@ public class StudentDaoImpl extends SearchableDaoImpl<StudentSearchParams, Stude
 	}
 
 	@Override
-	protected void applyFilters(StudentSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder,
+	protected void applyBasicFilters(StudentSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder,
 			Root<Student> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		if (searchParam.getId() != null) {

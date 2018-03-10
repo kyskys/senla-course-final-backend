@@ -26,4 +26,7 @@ public interface LectionController {
 
 	void addPairToLection(Long idPair, Long idLection);
 
+	List<LectionGetDto> getLectionsByCourseId(Long idCourse, String sortBy, Long id, String name, String pair,
+			Integer limit, Integer offset, boolean asc);
+
 }

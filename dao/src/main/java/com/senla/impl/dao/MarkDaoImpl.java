@@ -54,7 +54,7 @@ public class MarkDaoImpl extends SearchableDaoImpl<MarkSearchParams, Mark> imple
 	}
 
 	@Override
-	protected void applyFilters(MarkSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder,
+	protected void applyBasicFilters(MarkSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder,
 			Root<Mark> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 		if (searchParam.getId() != null) {

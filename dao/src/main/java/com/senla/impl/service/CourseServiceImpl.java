@@ -1,6 +1,7 @@
 package com.senla.impl.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,23 @@ public class CourseServiceImpl extends SearchableServiceImpl<CourseSearchParams,
 	@Override
 	public List<Lection> getLectionsByCourseId(Long idCourse) {
 		return courseDao.getLectionsByCourseId(idCourse);
+	}
+	
+	@Override
+	public void addlectionsToCourse(Long idCourse, List<Long> lections) {
+		Course course = courseDao.get(idCourse);
+		List<Long> courseLections = course.getLections().stream().map(lection -> lection.getId())
+				.collect(Collectors.toList());
+		for (Long idLection : lections) {
+			if (courseLections.contains(idLection)) {
+				courseLections.remove(idLection);
+			} else {
+				courseDao.addLectionToCourse(idLection, idCourse);
+			}
+		}
+		for (Long idLection : courseLections) {
+			courseDao.removeLectionFromCourse(idLection);
+		}
 	}
 
 }
