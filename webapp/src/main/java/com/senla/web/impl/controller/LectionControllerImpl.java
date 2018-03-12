@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.senla.api.service.CourseService;
 import com.senla.api.service.LectionService;
+import com.senla.api.service.PairService;
 import com.senla.dao.search.LectionSearchParams;
 import com.senla.dao.search.SortParam;
 import com.senla.entity.Lection;
@@ -28,17 +29,19 @@ public class LectionControllerImpl {
 	LectionService lectionService;
 	@Autowired
 	CourseService courseService;
+	@Autowired
+	PairService pairService;
 
 	@RequestMapping(value = "{id}/", method = RequestMethod.GET, produces = "application/json")
-	public LectionDto getLection(@PathVariable("id") Long id) {
-		return new LectionDto(lectionService.get(id));
+	public LectionGetDto getLection(@PathVariable("id") Long id) {
+		return new LectionGetDto(lectionService.get(id));
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.PUT)
-	public void createLection(@RequestBody CreateGroupOrLectionDto dto) {
+	public LectionGetDto createLection(@RequestBody CreateGroupOrLectionDto dto) {
 		Lection lection = new Lection();
 		lection.setName(dto.getName());
-		lectionService.create(lection);
+		return new LectionGetDto(lectionService.create(lection));
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
@@ -49,17 +52,19 @@ public class LectionControllerImpl {
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.POST)
-	public void updateLection(LectionDto dto, @PathVariable("id") Long id) {
-		Lection lection = new Lection();
-		lection.setId(id);
-		lection.setName(dto.getName());
-		Long idPair = dto.getPair();
-		Long idCourse = dto.getCourse();
-		if (idPair != null) {
-			lectionService.addPairToLection(idPair, id);
+	public void updateLection(@RequestBody LectionDto dto, @PathVariable("id") Long id) {
+		Lection lection = lectionService.get(id);
+		String name = dto.getName();
+		if(name!=null) {
+			lection.setName(name);
 		}
+		Long idPair = dto.getPair();
+		if (idPair != null) {
+			lection.setPair(pairService.get(idPair));
+		}
+		Long idCourse = dto.getCourse();
 		if (idCourse != null) {
-			courseService.addLectionToCourse(id, idCourse);
+			lection.setCourse(courseService.get(idCourse));
 		}
 		lectionService.update(lection);
 	}

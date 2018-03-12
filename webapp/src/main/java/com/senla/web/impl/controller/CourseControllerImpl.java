@@ -62,12 +62,6 @@ public class CourseControllerImpl implements CurrentUserSupport {
 		if(description!=null) {
 			course.setDescription(description);
 		}
-		List<Long> lections = dto.getLections();
-		if (lections != null) {
-			for (Long idLection : lections) {
-				courseService.addLectionToCourse(idLection, id);
-			}
-		}
 		Long lecturer = dto.getLecturer();
 		if(lecturer!=null) {
 			course.setLecturer(lecturerService.get(lecturer));

@@ -52,7 +52,6 @@ public class JWTManager {
 
 	public static boolean verifyToken(String token) {
 		try {
-			System.out.println(token);
 			SignedJWT sign = SignedJWT.parse(token);
 			JWSVerifier verifier = new MACVerifier(sharedKey);
 			Date expiryDate = (Date) sign.getJWTClaimsSet().getExpirationTime();
