@@ -17,6 +17,7 @@ import com.senla.dao.search.SortParam;
 import com.senla.entity.Mark;
 import com.senla.entity.Mark_;
 import com.senla.entity.Pair_;
+import com.senla.entity.Student;
 import com.senla.entity.Student_;
 
 @Repository
@@ -35,22 +36,24 @@ public class MarkDaoImpl extends SearchableDaoImpl<MarkSearchParams, Mark> imple
 
 	@Override
 	public void cloneMarkToPair(Long idPair, Long idMark) {
-		//TODO sozdat klonirovanie marki
-		/*Session session = getSession();
-		Query query = session.createQuery("update Mark set pair.id = :idPair where id= :idMark");
-		query.setParameter("idPair", idPair);
-		query.setParameter("idMark", idMark);
-		query.executeUpdate();*/
+		// TODO sozdat klonirovanie marki
+		/*
+		 * Session session = getSession(); Query query = session.
+		 * createQuery("update Mark set pair.id = :idPair where id= :idMark");
+		 * query.setParameter("idPair", idPair); query.setParameter("idMark",
+		 * idMark); query.executeUpdate();
+		 */
 	}
 
 	@Override
 	public void cloneMarkToStudent(Long idStudent, Long idMark) {
-		//TODO sozdat klonirovanie marki
-		/*Session session = getSession();
-		Query query = session.createQuery("update Mark set student.id = :idStudent where id= :idMark");
-		query.setParameter("idStudent", idStudent);
-		query.setParameter("idMark", idMark);
-		query.executeUpdate();*/
+		// TODO sozdat klonirovanie marki
+		/*
+		 * Session session = getSession(); Query query = session.
+		 * createQuery("update Mark set student.id = :idStudent where id= :idMark"
+		 * ); query.setParameter("idStudent", idStudent);
+		 * query.setParameter("idMark", idMark); query.executeUpdate();
+		 */
 	}
 
 	@Override
@@ -69,4 +72,23 @@ public class MarkDaoImpl extends SearchableDaoImpl<MarkSearchParams, Mark> imple
 		query.where(predicates.toArray(new Predicate[predicates.size()]));
 	}
 
+	@Override
+	public List<Mark> getMarksByStudentId(Long idStudent) {
+		List<Mark> result = searchWithAnotherFilter(null, null, -1, 0, true, (root, builder, query) -> {
+			if (idStudent != null) {
+				query.where(builder.equal(root.join(Mark_.student).get(Student_.id), idStudent));
+			}
+		});
+		return result;
+	}
+
+	@Override
+	public List<Mark> getMarksByPairId(Long idPair) {
+		List<Mark> result = searchWithAnotherFilter(null, null, -1, 0, true, (root, builder, query) -> {
+			if (idPair != null) {
+				query.where(builder.equal(root.join(Mark_.pair).get(Pair_.id), idPair));
+			}
+		});
+		return result;
+	}
 }

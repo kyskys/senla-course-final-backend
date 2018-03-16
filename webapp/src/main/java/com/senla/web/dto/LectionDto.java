@@ -5,7 +5,6 @@ import com.senla.entity.Lection;
 public class LectionDto {
 	private Long course;
 	private String name;
-	private Long pair;
 
 	public LectionDto() {
 
@@ -15,9 +14,6 @@ public class LectionDto {
 		this.name = lection.getName();
 		if (lection.getCourse() != null) {
 			this.course = lection.getCourse().getId();
-		}
-		if (lection.getPair() != null) {
-			this.pair = lection.getPair().getId();
 		}
 	}
 
@@ -35,14 +31,6 @@ public class LectionDto {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Long getPair() {
-		return pair;
-	}
-
-	public void setPair(Long pair) {
-		this.pair = pair;
 	}
 
 }

@@ -1,8 +1,9 @@
 package com.senla.web.impl.controller;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,18 @@ import com.senla.api.service.PairService;
 import com.senla.api.service.PairTimeService;
 import com.senla.dao.search.PairSearchParams;
 import com.senla.dao.search.SortParam;
+import com.senla.dao.util.DateFormatterUtil;
 import com.senla.entity.Pair;
-import com.senla.web.api.controller.PairController;
+import com.senla.entity.util.DictionaryItem;
 import com.senla.web.dto.CreatePairDto;
+import com.senla.web.dto.GroupPairDto;
 import com.senla.web.dto.PairGetDto;
 import com.senla.web.dto.PairUpdateDto;
+import com.senla.web.dto.TimetableItemDto;
 
 @RestController
-public class PairControllerImpl implements PairController {
+@RequestMapping("/api/pair/")
+public class PairControllerImpl {
 
 	@Autowired
 	PairService pairService;
@@ -40,34 +45,38 @@ public class PairControllerImpl implements PairController {
 	@Autowired
 	MarkService markService;
 
-	@RequestMapping(value = "/api/pair/{id}/", method = RequestMethod.GET, produces = "application/json")
-	@Override
+	@RequestMapping(value = "{id}/", method = RequestMethod.GET, produces = "application/json")
+
 	public PairGetDto getPair(@PathVariable("id") Long id) {
 		return new PairGetDto(pairService.get(id));
 	}
 
-	@RequestMapping(value = "/api/pair/", method = RequestMethod.PUT)
-	@Override
-	public void createPair(@RequestBody CreatePairDto dto) {
+	@RequestMapping(method = RequestMethod.PUT)
+	public PairGetDto createPair(@RequestBody CreatePairDto dto) {
 		Pair pair = new Pair();
 		pair.setName(dto.getName());
-		pairService.create(pair);
+		pair.setDate(DateFormatterUtil.getDateFromString(dto.getDate()));
+		pair.setLection(lectionService.get(dto.getLection()));
+		pair.setTime(pairTimeService.get(dto.getTime()));
+		return new PairGetDto(pairService.create(pair));
 	}
 
-	@RequestMapping(value = "/api/pair/{id}", method = RequestMethod.DELETE)
-	@Override
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+
 	public void deletePair(@PathVariable("id") Long id) {
 		Pair pair = new Pair();
 		pair.setId(id);
 		pairService.delete(pair);
 	}
 
-	@RequestMapping(value = "/api/pair/{id}", method = RequestMethod.POST)
-	@Override
+	@RequestMapping(value = "{id}", method = RequestMethod.POST)
+
 	public void updatePair(@RequestBody PairUpdateDto dto, @PathVariable("id") Long id) {
-		Pair pair = new Pair();
-		pair.setId(id);
-		pair.setDate(dto.getDate());
+		Pair pair = pairService.get(id);
+		LocalDateTime date = DateFormatterUtil.getDateFromString(dto.getDate());
+		if (date != null) {
+			pair.setDate(date);
+		}
 		Long idLection = dto.getLection();
 		if (idLection != null) {
 			pair.setLection(lectionService.get(idLection));
@@ -76,46 +85,70 @@ public class PairControllerImpl implements PairController {
 		if (idPairTime != null) {
 			pair.setTime(pairTimeService.get(idPairTime));
 		}
-		pair.setName(dto.getName());
-		List<Long> groups = dto.getGroups();
-		if (groups != null) {
-			for (Long idGroup : groups) {
-				groupService.addPairToGroup(id, idGroup);
-			}
+		String name = dto.getName();
+		if (name != null && name != "") {
+			pair.setName(dto.getName());
 		}
 		pairService.update(pair);
 	}
 
-	@RequestMapping(value = "/api/pair/", method = RequestMethod.GET, produces = "application/json")
-	@Override
+	@RequestMapping(value = "", method = RequestMethod.GET, produces = "application/json")
+
 	public List<PairGetDto> getAllPairs() {
 		return pairService.getAll().stream().map(PairGetDto::new).collect(Collectors.toList());
 	}
 
-	@RequestMapping(value = "/api/pair/search", method = RequestMethod.GET, produces = "application/json")
-	@Override
+	@RequestMapping(value = "search", method = RequestMethod.GET, produces = "application/json")
 	public List<PairGetDto> search(@RequestParam(value = "sort", required = false) String sortBy,
 			@RequestParam(value = "id", required = false) Long id,
-			@RequestParam(value = "date", required = false) LocalDateTime date,
-			@RequestParam(value = "lection", required = false) String lection,
-			@RequestParam(value = "start", required = false) LocalTime startTime,
-			@RequestParam(value = "end", required = false) LocalTime endTime, @RequestParam("limit") Integer limit,
+			@RequestParam(value = "id", required = false) String name,
+			@RequestParam(value = "date", required = false) String date,
+			@RequestParam(value = "lection", required = false) String lection, @RequestParam("limit") Integer limit,
 			@RequestParam("offset") Integer offset, @RequestParam("asc") boolean asc) {
-		PairSearchParams searchParam = new PairSearchParams(id, date, lection, startTime, endTime);
+		PairSearchParams searchParam = new PairSearchParams(id, name, DateFormatterUtil.getDateFromString(date),
+				lection);
 		SortParam sortParam = SortParam.getValueOf(sortBy);
+		System.out.println(lection);
 		List<PairGetDto> result = pairService.search(sortParam, searchParam, limit, offset, asc).stream()
 				.map(PairGetDto::new).collect(Collectors.toList());
 		return result;
 	}
 
-	@RequestMapping(value = "/api/pair/count", method = RequestMethod.GET, produces = "application/json")
-	@Override
+	@RequestMapping(value = "count", method = RequestMethod.GET, produces = "application/json")
 	public Long pairCount(@RequestParam(value = "id", required = false) Long id,
-			@RequestParam(value = "date", required = false) LocalDateTime date,
-			@RequestParam(value = "lection", required = false) String lection,
-			@RequestParam(value = "start", required = false) LocalTime startTime,
-			@RequestParam(value = "end", required = false) LocalTime endTime) {
-		PairSearchParams searchParam = new PairSearchParams(id, date, lection, startTime, endTime);
+			@RequestParam(value = "id", required = false) String name,
+			@RequestParam(value = "date", required = false) String date,
+			@RequestParam(value = "lection", required = false) String lection) {
+		PairSearchParams searchParam = new PairSearchParams(id, name, DateFormatterUtil.getDateFromString(date),
+				lection);
 		return pairService.count(searchParam);
+	}
+
+	@RequestMapping(value = "dictionary", method = RequestMethod.GET)
+	public List<DictionaryItem> getDictionary() {
+		return pairService.getDictionary();
+	}
+
+	@RequestMapping(value = "time/dictionary", method = RequestMethod.GET)
+	public List<DictionaryItem> getPairTimeDictionary() {
+		return pairTimeService.getDictionary();
+	}
+
+	@RequestMapping(value = "group/{group}", method = RequestMethod.GET, produces = "application/json")
+	public List<GroupPairDto> getPairsByGroupId(@PathVariable("group") Long idGroup) {
+		return pairService.getPairsByGroupId(idGroup).stream().map(GroupPairDto::new).collect(Collectors.toList());
+	}
+
+	@RequestMapping(value = "timetable/{group}", method = RequestMethod.GET)
+	public List<TimetableItemDto> getTimetableByWeek(@RequestParam("day") String startOfWeek, @PathVariable("group") Long idGroup) {
+		//Map<String,List<PairGetDto>> result = new HashMap<String,List<PairGetDto>>();
+		LocalDateTime day = DateFormatterUtil.getDateFromString(startOfWeek);
+		return pairService.getPairsByWeek(day,idGroup).stream().map(TimetableItemDto::new).collect(Collectors.toList());
+	}
+	
+
+	@RequestMapping(value = "{id}/add/group", method = RequestMethod.POST)
+	public void addGroupsToPair(@PathVariable("id") Long idPair, @RequestBody List<Long> groups) {
+		pairService.addGroupsToPair(idPair, groups);
 	}
 }

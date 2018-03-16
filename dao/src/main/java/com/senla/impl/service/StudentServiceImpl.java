@@ -1,5 +1,7 @@
 package com.senla.impl.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,16 @@ public class StudentServiceImpl extends SearchableServiceImpl<StudentSearchParam
 	@Override
 	protected Searchable<StudentSearchParams, Student> getSearchableDao() {
 		return studentDao;
+	}
+
+	@Override
+	public List<Student> getStudentsByGroupId(Long idGroup) {
+		return studentDao.getStudentsByGroupId(idGroup);
+	}
+
+	@Override
+	public List<Student> getStudentsWithoutGroup() {
+		return studentDao.getStudentsWithoutGroup();
 	}
 
 }

@@ -20,9 +20,11 @@ import com.senla.entity.Mark;
 import com.senla.web.api.controller.MarkController;
 import com.senla.web.dto.MarkGetDto;
 import com.senla.web.dto.MarkUpdateDto;
+import com.senla.web.dto.PairMarkDto;
 import com.senla.web.dto.CreateMarkDto;
 
 @RestController
+@RequestMapping("/api/mark/")
 public class MarkControllerImpl implements MarkController {
 
 	@Autowired
@@ -32,13 +34,13 @@ public class MarkControllerImpl implements MarkController {
 	@Autowired
 	StudentService studentService;
 
-	@RequestMapping(value = "/api/mark/{id}/", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{id}/", method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public MarkGetDto getMark(@PathVariable("id") Long id) {
 		return new MarkGetDto(markService.get(id));
 	}
 
-	@RequestMapping(value = "/api/mark/", method = RequestMethod.PUT)
+	@RequestMapping(value = "", method = RequestMethod.PUT)
 	@Override
 	public void createMark(@RequestBody CreateMarkDto dto) {
 		Mark mark = new Mark();
@@ -48,7 +50,7 @@ public class MarkControllerImpl implements MarkController {
 		markService.create(mark);
 	}
 
-	@RequestMapping(value = "/api/mark/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	@Override
 	public void deleteMark(@PathVariable("id") Long id) {
 		Mark Mark = new Mark();
@@ -56,24 +58,32 @@ public class MarkControllerImpl implements MarkController {
 		markService.delete(Mark);
 	}
 
-	@RequestMapping(value = "/api/mark/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "{id}", method = RequestMethod.POST)
 	@Override
 	public void updateMark(@RequestBody MarkUpdateDto dto, @PathVariable("id") Long id) {
-		Mark mark = new Mark();
-		mark.setId(id);
-		mark.setMark(dto.getMark());
-		mark.setPair(pairService.get(dto.getPair()));
-		mark.setStudent(studentService.get(dto.getStudent()));
+		Mark mark = markService.get(id);
+		Integer _mark = dto.getMark();
+		if(_mark!=null) {
+			mark.setMark(_mark);
+		}
+		Long idPair = dto.getPair();
+		if(idPair!=null) {
+			mark.setPair(pairService.get(idPair));
+		}
+		Long idStudent = dto.getStudent();
+		if(idStudent!=null) {
+			mark.setStudent(studentService.get(idStudent));
+		}
 		markService.update(mark);
 	}
 
-	@RequestMapping(value = "/api/mark/", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public List<MarkGetDto> getAllMarks() {
 		return markService.getAll().stream().map(MarkGetDto::new).collect(Collectors.toList());
 	}
 
-	@RequestMapping(value = "/api/mark/search", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "search", method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public List<MarkGetDto> search(@RequestParam(value = "sort", required = false) String sortBy,
 			@RequestParam(value = "id", required = false) Long id,
@@ -87,7 +97,7 @@ public class MarkControllerImpl implements MarkController {
 		return result;
 	}
 
-	@RequestMapping(value = "/api/mark/count", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "count", method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public Long markCount(@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "pair", required = false) String pair,
@@ -96,16 +106,27 @@ public class MarkControllerImpl implements MarkController {
 		return markService.count(searchParam);
 	}
 
-	@RequestMapping(value = "/api/mark/{mark}/clone/pair/{pair}", method = RequestMethod.POST)
+	@RequestMapping(value = "{mark}/clone/pair/{pair}", method = RequestMethod.POST)
 	@Override
 	public void cloneMarkToPair(@PathVariable("pair") Long idPair, @PathVariable("mark") Long idMark) {
 		markService.cloneMarkToPair(idPair, idMark);
 	}
 
-	@RequestMapping(value = "/api/mark/{mark}/clone/student/{student}", method = RequestMethod.POST)
+	@RequestMapping(value = "{mark}/clone/student/{student}", method = RequestMethod.POST)
 	@Override
 	public void cloneMarkToStudent(@PathVariable("student") Long idStudent, @PathVariable("mark") Long idMark) {
 		markService.cloneMarkToStudent(idStudent, idMark);
 	}
 
+	@RequestMapping(value = "pair/{pair}", method = RequestMethod.GET, produces = "application/json")
+	public List<PairMarkDto> getMarksByPairId(@PathVariable("pair") Long idPair) {
+		return markService.getMarksByPairId(idPair).stream().map(PairMarkDto::new)
+				.collect(Collectors.toList());
+	}
+	
+	@RequestMapping(value = "student/{student}", method = RequestMethod.GET, produces = "application/json")
+	public List<PairMarkDto> getMarksByStudentId(@PathVariable("pair") Long idStudent) {
+		return markService.getMarksByStudentId(idStudent).stream().map(PairMarkDto::new)
+				.collect(Collectors.toList());
+	}
 }

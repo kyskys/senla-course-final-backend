@@ -16,9 +16,9 @@ import com.senla.api.service.LecturerService;
 import com.senla.dao.search.CourseSearchParams;
 import com.senla.dao.search.SortParam;
 import com.senla.entity.Course;
+import com.senla.entity.util.DictionaryItem;
 import com.senla.holder.support.CurrentUserSupport;
 import com.senla.web.dto.CourseGetDto;
-import com.senla.web.dto.CourseLectionDto;
 import com.senla.web.dto.CourseUpdateDto;
 import com.senla.web.dto.CreateCourseDto;
 
@@ -55,11 +55,11 @@ public class CourseControllerImpl implements CurrentUserSupport {
 	public void updateCourse(@RequestBody CourseUpdateDto dto, @PathVariable("id") Long id) {
 		Course course = courseService.get(id);
 		String name = dto.getName();
-		if(name!=null) {
+		if(name!=null&&name!="") {
 			course.setName(name);
 		}
 		String description = dto.getDescription();
-		if(description!=null) {
+		if(description!=null&&description!="") {
 			course.setDescription(description);
 		}
 		Long lecturer = dto.getLecturer();
@@ -97,14 +97,6 @@ public class CourseControllerImpl implements CurrentUserSupport {
 		courseService.removeLectionFromCourse(idLection);
 	}
 
-	@RequestMapping(value = "{id}/lection/", method = RequestMethod.GET, produces = "application/json")
-	public List<CourseLectionDto> getLectionsByCourseId(@PathVariable("id") Long idCourse,
-			@RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
-		return courseService.getLectionsByCourseId(idCourse).stream().map(CourseLectionDto::new)
-				.collect(Collectors.toList());
-		//TODO dopisat vibor lekcii kyrsa
-	}
-
 	@RequestMapping(value = "count", method = RequestMethod.GET, produces = "application/json")
 	public Long courseCount(@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name,
@@ -116,5 +108,10 @@ public class CourseControllerImpl implements CurrentUserSupport {
 	@RequestMapping(value="{id}/add/lection", method=RequestMethod.POST)
 	public void addLectionsToCourse(@PathVariable("id") Long idCourse, @RequestBody List<Long> lections) {
 		courseService.addlectionsToCourse(idCourse, lections);
+	}
+	
+	@RequestMapping(value="dictionary",method=RequestMethod.GET)
+	public List<DictionaryItem> getDictionary() {
+		return courseService.getDictionary();
 	}
 }

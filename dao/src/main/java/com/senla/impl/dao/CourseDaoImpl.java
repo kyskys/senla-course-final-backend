@@ -19,6 +19,7 @@ import com.senla.dao.search.SortParam;
 import com.senla.entity.Course;
 import com.senla.entity.Course_;
 import com.senla.entity.Lection;
+import com.senla.entity.Lection_;
 import com.senla.entity.Lecturer_;
 
 @Repository
@@ -58,7 +59,7 @@ public class CourseDaoImpl extends SearchableDaoImpl<CourseSearchParams, Course>
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Lection> query = builder.createQuery(Lection.class);
 		Root<Lection> root = query.from(Lection.class);
-		query.select(root).where(builder.equal(root.get("course"), idCourse));
+		query.select(root).where(builder.equal(root.join(Lection_.course).get(Course_.id), idCourse));
 		TypedQuery<Lection> result = session.createQuery(query);
 		return result.getResultList();
 	}

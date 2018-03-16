@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+    
+   <display-name>Archetype Created Web Application</display-name>
+   
+   <servlet>
+      <servlet-name>AutoServiceWeb</servlet-name>
+      <servlet-class>
+         org.springframework.web.servlet.DispatcherServlet
+      </servlet-class>
+      <load-on-startup>1</load-on-startup>
+   </servlet>
+
+   <servlet-mapping>
+      <servlet-name>AutoServiceWeb</servlet-name>
+      <url-pattern>/</url-pattern>
+   </servlet-mapping>
+   
+   <context-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>JsonMapperConfig.xml</param-value>
+   </context-param>
+
+   <listener>
+        <listener-class>
+        org.springframework.web.context.request.RequestContextListener
+        </listener-class>
+   </listener>
+   
+   <listener>
+      <listener-class>
+         org.springframework.web.context.ContextLoaderListener
+      </listener-class>
+   </listener>
+   
+   <filter>
+    <filter-name>CORSFilter</filter-name>
+    <filter-class>com.thetransactioncompany.cors.CORSFilter</filter-class>
+     <init-param>
+                <param-name>cors.allowOrigin</param-name>
+                <param-value>*</param-value>
+        </init-param>
+        <init-param>
+                <param-name>cors.supportedMethods</param-name>
+                <param-value>GET, POST, HEAD, PUT, DELETE</param-value>
+        </init-param>
+</filter>
+<filter-mapping>
+    <filter-name>CORSFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping>
+
+<filter>
+    <filter-name>JWTFilter</filter-name>
+    <filter-class>com.senla.web.filter.JWTFilter</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>JWTFilter</filter-name>
+    <url-pattern>/api/*</url-pattern>
+</filter-mapping>
+
+<filter>
+    <filter-name>UserPrivilegieFilter</filter-name>
+    <filter-class>com.senla.web.filter.UserPrivilegieFilter</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>UserPrivilegieFilter</filter-name>
+    <url-pattern>/api/*</url-pattern>
+</filter-mapping>
+
+
+</web-app>

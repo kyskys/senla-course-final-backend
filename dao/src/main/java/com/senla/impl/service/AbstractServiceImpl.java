@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.senla.api.dao.AbstractDao;
 import com.senla.api.service.AbstractService;
 import com.senla.entity.AbstractEntity;
+import com.senla.entity.util.DictionaryItem;
 
 @Transactional
 public abstract class AbstractServiceImpl<T extends AbstractEntity> implements AbstractService<T> {
@@ -41,5 +42,10 @@ public abstract class AbstractServiceImpl<T extends AbstractEntity> implements A
 	@Override
 	public Long count() {
 		return getDao().count();
+	}
+
+	@Override
+	public List<DictionaryItem> getDictionary() {
+		return getDao().getDictionary();
 	}
 }

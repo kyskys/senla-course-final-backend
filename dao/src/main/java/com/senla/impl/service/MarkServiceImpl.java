@@ -1,5 +1,7 @@
 package com.senla.impl.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +38,16 @@ public class MarkServiceImpl extends SearchableServiceImpl<MarkSearchParams, Mar
 	@Override
 	public void cloneMarkToStudent(Long idStudent, Long idMark) {
 		markDao.cloneMarkToStudent(idStudent, idMark);
+	}
+
+	@Override
+	public List<Mark> getMarksByStudentId(Long idStudent) {
+		return markDao.getMarksByStudentId(idStudent);
+	}
+
+	@Override
+	public List<Mark> getMarksByPairId(Long idPair) {
+		return markDao.getMarksByPairId(idPair);
 	}
 
 }

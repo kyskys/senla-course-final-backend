@@ -53,4 +53,22 @@ public class StudentDaoImpl extends SearchableDaoImpl<StudentSearchParams, Stude
 		}
 		query.where(predicates.toArray(new Predicate[predicates.size()]));
 	}
+
+	@Override
+	public List<Student> getStudentsWithoutGroup() {
+		List<Student> result = searchWithAnotherFilter(null, null, -1, 0, true, (root, builder, query) -> {
+				query.where(builder.isNull(root.get(Student_.group)));
+		});
+		return result;
+	}
+
+	@Override
+	public List<Student> getStudentsByGroupId(Long idGroup) {
+		List<Student> result = searchWithAnotherFilter(null, null, -1, 0, true, (root, builder, query) -> {
+			if (idGroup != null) {
+				query.where(builder.equal(root.join(Student_.group).get(Group_.id), idGroup));
+			}
+		});
+		return result;
+	}
 }

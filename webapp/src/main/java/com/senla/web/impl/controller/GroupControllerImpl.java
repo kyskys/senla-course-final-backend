@@ -15,46 +15,46 @@ import com.senla.api.service.GroupService;
 import com.senla.dao.search.GroupSearchParams;
 import com.senla.dao.search.SortParam;
 import com.senla.entity.Group;
-import com.senla.web.api.controller.GroupController;
+import com.senla.entity.util.DictionaryItem;
 import com.senla.web.dto.CreateGroupOrLectionDto;
 import com.senla.web.dto.GroupDto;
 import com.senla.web.dto.GroupGetDto;
 import com.senla.web.dto.GroupPairDto;
 import com.senla.web.dto.GroupStudentDto;
+import com.senla.web.dto.StudentGetDto;
 
 @RestController
-public class GroupControllerImpl implements GroupController {
+@RequestMapping("/api/group/")
+public class GroupControllerImpl {
 	@Autowired
 	GroupService groupService;
 
-	@RequestMapping(value = "/api/group/{id}", method = RequestMethod.GET, produces = "application/json")
-	@Override
+	@RequestMapping(value = "{id}", method = RequestMethod.GET, produces = "application/json")
 	public GroupGetDto getGroup(@PathVariable("id") Long id) {
 		return new GroupGetDto(groupService.get(id));
 	}
 
-	@RequestMapping(value = "/api/group/", method = RequestMethod.PUT)
-	@Override
-	public void createGroup(@RequestBody CreateGroupOrLectionDto dto) {
+	@RequestMapping(method = RequestMethod.PUT)
+	public GroupGetDto createGroup(@RequestBody CreateGroupOrLectionDto dto) {
 		Group group = new Group();
 		group.setName(dto.getName());
-		groupService.create(group);
+		return new GroupGetDto(groupService.create(group));
 	}
 
-	@RequestMapping(value = "/api/group/{id}", method = RequestMethod.DELETE)
-	@Override
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public void deleteGroup(@PathVariable("id") Long id) {
 		Group group = new Group();
 		group.setId(id);
 		groupService.delete(group);
 	}
 
-	@RequestMapping(value = "/api/group/{id}", method = RequestMethod.POST)
-	@Override
-	public void updateGroup(GroupDto dto, @PathVariable("id") Long id) {
-		Group group = new Group();
-		group.setId(id);
-		group.setName(dto.getName());
+	@RequestMapping(value = "{id}", method = RequestMethod.POST)
+	public void updateGroup(@PathVariable("id") Long id, @RequestBody GroupDto dto) {
+		Group group = groupService.get(id);
+		String name = dto.getName();
+		if (name != null) {
+			group.setName(name);
+		}
 		List<Long> students = dto.getStudents();
 		if (students != null) {
 			for (Long idStudent : students) {
@@ -64,69 +64,71 @@ public class GroupControllerImpl implements GroupController {
 		groupService.update(group);
 	}
 
-	@RequestMapping(value = "/api/group/", method = RequestMethod.GET, produces = "application/json")
-	@Override
+	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public List<GroupGetDto> getAllGroups() {
 		return groupService.getAll().stream().map(GroupGetDto::new).collect(Collectors.toList());
 	}
 
-	@RequestMapping(value = "/api/group/search", method = RequestMethod.GET, produces = "application/json")
-	@Override
+	@RequestMapping(value = "search", method = RequestMethod.GET, produces = "application/json")
 	public List<GroupGetDto> search(@RequestParam(value = "sort", required = false) String sortBy,
 			@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name, @RequestParam("limit") Integer limit,
 			@RequestParam("offset") Integer offset, @RequestParam("asc") boolean asc) {
 		GroupSearchParams searchParam = new GroupSearchParams(id, name);
 		SortParam sortParam = SortParam.getValueOf(sortBy);
-		List<GroupGetDto> result = groupService.search(sortParam, searchParam, limit, offset, asc).stream().map(GroupGetDto::new)
-				.collect(Collectors.toList());
+		List<GroupGetDto> result = groupService.search(sortParam, searchParam, limit, offset, asc).stream()
+				.map(GroupGetDto::new).collect(Collectors.toList());
 		return result;
 	}
-	
-	@RequestMapping(value = "/api/group/count", method = RequestMethod.GET, produces = "application/json")
-	@Override
-	public Long groupCount(
-			@RequestParam(value = "id", required = false) Long id,
+
+	@RequestMapping(value = "count", method = RequestMethod.GET, produces = "application/json")
+	public Long groupCount(@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name) {
 		GroupSearchParams searchParam = new GroupSearchParams(id, name);
 		return groupService.count(searchParam);
 	}
 
-	@RequestMapping(value = "/api/group/{id}/pair/", method = RequestMethod.GET, produces = "application/json")
-	@Override
-	public List<GroupPairDto> getPairsByGroupId(@PathVariable("id") Long idGroup) {
-		return groupService.getPairsByGroupId(idGroup).stream().map(GroupPairDto::new).collect(Collectors.toList());
-	}
-
-	@RequestMapping(value = "/api/group/{id}student/", method = RequestMethod.GET, produces = "application/json")
-	@Override
-	public List<GroupStudentDto> getStudentsByGroupId(@PathVariable("id") Long idGroup) {
-		return groupService.getStudentsByGroupId(idGroup).stream().map(GroupStudentDto::new)
-				.collect(Collectors.toList());
-	}
-
-	@RequestMapping(value = "/api/group/{group}/add/pair/{pair}", method = RequestMethod.GET)
-	@Override
+	@RequestMapping(value = "{group}/add/pair/{pair}", method = RequestMethod.GET)
 	public void addPairToGroup(@PathVariable("pair") Long idPair, @PathVariable("group") Long idGroup) {
 		groupService.addPairToGroup(idPair, idGroup);
 	}
 
-	@RequestMapping(value = "/api/group/{group}/remove/pair/{pair}", method = RequestMethod.GET)
-	@Override
+	@RequestMapping(value = "{group}/remove/pair/{pair}", method = RequestMethod.GET)
 	public void removePairFromGroup(@PathVariable("pair") Long idPair, @PathVariable("group") Long idGroup) {
 		groupService.removePairFromGroup(idPair, idGroup);
 	}
 
-	@RequestMapping(value = "/api/group/{group}/add/student/{student}", method = RequestMethod.GET)
-	@Override
+	@RequestMapping(value = "{group}/add/student/{student}", method = RequestMethod.GET)
 	public void addStudentToGroup(@PathVariable("student") Long idStudent, @PathVariable("group") Long idGroup) {
 		groupService.addStudentToGroup(idStudent, idGroup);
 	}
 
-	@RequestMapping(value = "/api/group/{group}/remove/student/{student}", method = RequestMethod.GET)
-	@Override
+	@RequestMapping(value = "{group}/remove/student/{student}", method = RequestMethod.GET)
 	public void removeStudentFromGroup(@PathVariable("student") Long idStudent) {
 		groupService.removeStudentFromGroup(idStudent);
 	}
 
+	@RequestMapping(value = "{id}/add/student", method = RequestMethod.POST)
+	public void addStudentsToGroup(@PathVariable("id") Long idGroup, @RequestBody List<Long> students) {
+		groupService.addstudentsToGroup(idGroup, students);
+	}
+
+	@RequestMapping(value = "dictionary", method = RequestMethod.GET)
+	public List<DictionaryItem> getDictionary() {
+		return groupService.getDictionary();
+	}
+	
+	@RequestMapping(value = "pair/{pair}", method = RequestMethod.GET)
+	public List<GroupGetDto> getGroupsByPairId(@PathVariable("pair") Long idPair) {
+		List<GroupGetDto> result = groupService.getGroupsByPairId(idPair).stream().map(GroupGetDto::new)
+				.collect(Collectors.toList());
+		return result;
+	}
+
+	@RequestMapping(value = "/nopair/{pair}", method = RequestMethod.GET)
+	public List<GroupGetDto> getGroupsWithoutPair(@PathVariable("pair") Long idPair) {
+		List<GroupGetDto> result = groupService.getGroupsWithoutPair(idPair).stream().map(GroupGetDto::new)
+				.collect(Collectors.toList());
+		return result;
+	}
 }

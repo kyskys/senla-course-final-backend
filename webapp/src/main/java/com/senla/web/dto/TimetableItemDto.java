@@ -3,33 +3,23 @@ package com.senla.web.dto;
 import com.senla.dao.util.DateFormatterUtil;
 import com.senla.entity.Pair;
 
-public class PairGetDto {
-	private Long id;
+public class TimetableItemDto {
 	private String name;
-	private String date;
 	private String lection;
 	private String startTime;
 	private String endTime;
+	private String date;
 
-	public PairGetDto() {
+	public TimetableItemDto() {
 
 	}
 
-	public PairGetDto(Pair pair) {
-		this.id = pair.getId();
+	public TimetableItemDto(Pair pair) {
 		this.name = pair.getName();
-		this.date = DateFormatterUtil.getDateAsString(pair.getDate());
 		this.lection = pair.getLection().getName();
 		this.startTime = DateFormatterUtil.getTimeAsString(pair.getTime().getStartTime());
 		this.endTime = DateFormatterUtil.getTimeAsString(pair.getTime().getEndTime());
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+		this.date = DateFormatterUtil.getDateAsString(pair.getDate());
 	}
 
 	public String getName() {
@@ -48,14 +38,6 @@ public class PairGetDto {
 		this.lection = lection;
 	}
 
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
 	public String getStartTime() {
 		return startTime;
 	}
@@ -70,6 +52,14 @@ public class PairGetDto {
 
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
 	}
 
 }

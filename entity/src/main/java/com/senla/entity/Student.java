@@ -2,6 +2,7 @@ package com.senla.entity;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -19,7 +20,7 @@ public class Student extends Person {
 		this.role = RoleEnum.STUDENT;
 	}
 
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinTable(name = "group_students", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
 	private Group group;
 

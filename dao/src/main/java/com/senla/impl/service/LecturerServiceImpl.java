@@ -39,6 +39,6 @@ public class LecturerServiceImpl extends SearchableServiceImpl<LecturerSearchPar
 	@Override
 	public List<Course> getCoursesByLecturerId(Long idLecturer) {
 		return lecturerDao.getCoursesByLecturerId(idLecturer);
-	}	
+	}
 
 }

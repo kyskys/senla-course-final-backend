@@ -3,6 +3,7 @@ package com.senla.api.dao;
 import java.util.List;
 
 import com.senla.entity.AbstractEntity;
+import com.senla.entity.util.DictionaryItem;
 
 public interface AbstractDao<T extends AbstractEntity> {
 
@@ -19,4 +20,7 @@ public interface AbstractDao<T extends AbstractEntity> {
 	List<T> getAll();
 	
 	Long count();
+	
+	List<DictionaryItem> getDictionary();
+
 }

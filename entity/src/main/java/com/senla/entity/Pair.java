@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SecondaryTable;
@@ -17,7 +18,7 @@ import javax.persistence.Table;
 @SecondaryTable(name = "pair_time")
 public class Pair extends AbstractEntity {
 
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "lection_id")
 	private Lection lection;
 
@@ -25,7 +26,7 @@ public class Pair extends AbstractEntity {
 	@JoinColumn(name = "pair_time_id")
 	private PairTime time;
 
-	@Column(name="name")
+	@Column(name = "name")
 	private String name;
 
 	@Column(name = "date")

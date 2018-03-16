@@ -9,6 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -18,7 +19,10 @@ import com.senla.dao.search.SortParam;
 import com.senla.entity.Group;
 import com.senla.entity.Group_;
 import com.senla.entity.Pair;
+import com.senla.entity.Pair_;
 import com.senla.entity.Student;
+import com.senla.entity.Timetable;
+import com.senla.entity.Timetable_;
 
 @Repository
 public class GroupDaoImpl extends SearchableDaoImpl<GroupSearchParams, Group> implements GroupDao {
@@ -34,45 +38,6 @@ public class GroupDaoImpl extends SearchableDaoImpl<GroupSearchParams, Group> im
 	}
 
 	@Override
-	public List<Pair> getPairsByGroupId(Long idGroup) {
-		Session session = getSession();
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<Pair> query = builder.createQuery(Pair.class);
-		Root<Pair> root = query.from(Pair.class);
-		query.select(root).where(builder.equal(root.get("pair"), idGroup));
-		TypedQuery<Pair> result = session.createQuery(query);
-		return result.getResultList();
-	}
-
-	@Override
-	public List<Student> getStudentsByGroupId(Long idGroup) {
-		Session session = getSession();
-		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<Student> query = builder.createQuery(Student.class);
-		Root<Student> root = query.from(Student.class);
-		query.select(root).where(builder.equal(root.get("student"), idGroup));
-		TypedQuery<Student> result = session.createQuery(query);
-		return result.getResultList();
-	}
-
-	@Override
-	public void addStudentToGroup(Long idStudent, Long idGroup) {
-		Session session = getSession();
-		Query query = session.createQuery("update Student set group.id = :idGroup where id= :idStudent");
-		query.setParameter("idStudent", idStudent);
-		query.setParameter("idGroup", idGroup);
-		query.executeUpdate();
-	}
-
-	@Override
-	public void removeStudentFromGroup(Long idStudent) {
-		Session session = getSession();
-		Query query = session.createQuery("update Student set group.id = null where id= :idStudent");
-		query.setParameter("idStudent", idStudent);
-		query.executeUpdate();
-	}
-
-	@Override
 	protected void applyBasicFilters(GroupSearchParams searchParam, CriteriaQuery<?> query, CriteriaBuilder builder,
 			Root<Group> root) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
@@ -83,6 +48,24 @@ public class GroupDaoImpl extends SearchableDaoImpl<GroupSearchParams, Group> im
 			predicates.add(builder.like(root.get(Group_.name), like(searchParam.getName())));
 		}
 		query.where(predicates.toArray(new Predicate[predicates.size()]));
+	}
+
+	@Override
+	public List<Group> getGroupsByPairId(Long idPair) {
+		List<Group> result = searchWithAnotherFilter(null, null, -1, 0, true, (root, builder, query) -> {
+			query.where(builder.equal(root.join(Group_.pairs).get(Pair_.id), idPair));
+		});
+		return result;
+	}
+
+	@Override
+	public List<Group> getGroupsWithoutPair(Long idPair) {
+		List<Group> result = searchWithAnotherFilter(null, null, -1, 0, true, (root, builder, query) -> {
+			Subquery<Long> subQuery = query.subquery(Long.class);
+			Root<Timetable> subRoot = subQuery.from(Timetable.class);
+			query.where(builder.not(root.get(Group_.id).in(subQuery.select(subRoot.get(Timetable_.groupId)).where(builder.equal(subRoot.get(Timetable_.pairId), idPair)))));
+		});
+		return result;
 	}
 
 }

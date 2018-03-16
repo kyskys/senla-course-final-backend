@@ -17,6 +17,8 @@ import com.senla.api.service.PairService;
 import com.senla.dao.search.LectionSearchParams;
 import com.senla.dao.search.SortParam;
 import com.senla.entity.Lection;
+import com.senla.entity.util.DictionaryItem;
+import com.senla.web.dto.CourseLectionDto;
 import com.senla.web.dto.CreateGroupOrLectionDto;
 import com.senla.web.dto.LectionDto;
 import com.senla.web.dto.LectionGetDto;
@@ -55,12 +57,8 @@ public class LectionControllerImpl {
 	public void updateLection(@RequestBody LectionDto dto, @PathVariable("id") Long id) {
 		Lection lection = lectionService.get(id);
 		String name = dto.getName();
-		if(name!=null) {
+		if(name!=null&&name!="") {
 			lection.setName(name);
-		}
-		Long idPair = dto.getPair();
-		if (idPair != null) {
-			lection.setPair(pairService.get(idPair));
 		}
 		Long idCourse = dto.getCourse();
 		if (idCourse != null) {
@@ -108,16 +106,21 @@ public class LectionControllerImpl {
 	}
 
 	@RequestMapping(value = "course/{course}", method = RequestMethod.GET)
-	public List<LectionGetDto> getLectionsByCourseId(@PathVariable("course") Long idCourse) {
-		List<LectionGetDto> result = lectionService.getLectionsByCourseId(idCourse).stream()
-				.map(LectionGetDto::new).collect(Collectors.toList());
+	public List<CourseLectionDto> getLectionsByCourseId(@PathVariable("course") Long idCourse) {
+		List<CourseLectionDto> result = lectionService.getLectionsByCourseId(idCourse).stream()
+				.map(CourseLectionDto::new).collect(Collectors.toList());
 		return result;
 	}
 	
 	@RequestMapping(value = "course/", method = RequestMethod.GET)
-	public List<LectionGetDto> getLectionsWithoutCourse() {
-		List<LectionGetDto> result = lectionService.getLectionsWithoutCourse().stream()
-				.map(LectionGetDto::new).collect(Collectors.toList());
+	public List<CourseLectionDto> getLectionsWithoutCourse() {
+		List<CourseLectionDto> result = lectionService.getLectionsWithoutCourse().stream()
+				.map(CourseLectionDto::new).collect(Collectors.toList());
 		return result;
+	}
+	
+	@RequestMapping(value="dictionary",method=RequestMethod.GET)
+	public List<DictionaryItem> getDictionary() {
+		return lectionService.getDictionary();
 	}
 }

@@ -14,22 +14,24 @@ import com.senla.api.service.LecturerService;
 import com.senla.dao.search.LecturerSearchParams;
 import com.senla.dao.search.SortParam;
 import com.senla.entity.Lecturer;
+import com.senla.entity.util.DictionaryItem;
 import com.senla.web.api.controller.LecturerController;
 import com.senla.web.dto.LecturerGetDto;
 import com.senla.web.dto.LecturerUpdateDto;
 
 @RestController
+@RequestMapping("/api/lecturer/")
 public class LecturerControllerImpl implements LecturerController {
 	@Autowired
 	LecturerService lecturerService;
 
-	@RequestMapping(value = "/api/lecturer/{id}/", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{id}/", method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public LecturerGetDto getLecturer(@PathVariable("id") Long id) {
 		return new LecturerGetDto(lecturerService.get(id));
 	}
 
-	@RequestMapping(value = "/api/lecturer/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	@Override
 	public void deleteLecturer(@PathVariable("id") Long id) {
 		Lecturer lecturer = new Lecturer();
@@ -37,7 +39,7 @@ public class LecturerControllerImpl implements LecturerController {
 		lecturerService.delete(lecturer);
 	}
 
-	@RequestMapping(value = "/api/lecturer/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "{id}", method = RequestMethod.POST)
 	@Override
 	public void updateLecturer(LecturerUpdateDto dto, @PathVariable("id") Long id) {
 		Lecturer lecturer = new Lecturer();
@@ -55,13 +57,13 @@ public class LecturerControllerImpl implements LecturerController {
 		lecturerService.update(lecturer);
 	}
 
-	@RequestMapping(value = "/api/lecturer/", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "", method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public List<LecturerGetDto> getAllLecturers() {
 		return lecturerService.getAll().stream().map(LecturerGetDto::new).collect(Collectors.toList());
 	}
 
-	@RequestMapping(value = "/api/lecturer/search", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "search", method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public List<LecturerGetDto> search(@RequestParam(value = "sort", required = false) String sortBy,
 			@RequestParam(value = "id", required = false) Long id,
@@ -76,7 +78,7 @@ public class LecturerControllerImpl implements LecturerController {
 		return result;
 	}
 
-	@RequestMapping(value = "/api/lecturer/count", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "count", method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public Long lecturerCount(@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name,
@@ -86,10 +88,16 @@ public class LecturerControllerImpl implements LecturerController {
 		return lecturerService.count(searchParam);
 	}
 
-	@RequestMapping(value = "/api/lecturer/{lecturer}/add/course/{course}", method = RequestMethod.POST)
+	@RequestMapping(value = "{lecturer}/add/course/{course}", method = RequestMethod.POST)
 	@Override
 	public void addCourseToLecturer(@PathVariable("course") Long idCourse, @PathVariable("lecturer") Long idLecturer) {
 		lecturerService.addCourseToLecturer(idCourse, idLecturer);
 	}
+	
+	@RequestMapping(value="dictionary",method=RequestMethod.GET)
+	public List<DictionaryItem> getDictionary() {
+		return lecturerService.getDictionary();
+	}
+	
 
 }

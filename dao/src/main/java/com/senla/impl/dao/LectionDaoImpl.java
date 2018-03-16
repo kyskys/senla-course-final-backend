@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
+import javax.persistence.Tuple;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -17,7 +20,9 @@ import com.senla.dao.search.SortParam;
 import com.senla.entity.Course_;
 import com.senla.entity.Lection;
 import com.senla.entity.Lection_;
+import com.senla.entity.Pair;
 import com.senla.entity.Pair_;
+import com.senla.entity.util.DictionaryItem;
 
 @Repository
 public class LectionDaoImpl extends SearchableDaoImpl<LectionSearchParams, Lection> implements LectionDao {
@@ -30,7 +35,6 @@ public class LectionDaoImpl extends SearchableDaoImpl<LectionSearchParams, Lecti
 	protected void initSortMap() {
 		sortMap.put(SortParam.ID, Lection_.id);
 		sortMap.put(SortParam.NAME, Lection_.name);
-		sortMap.put(SortParam.PAIR_ID, Lection_.pair);
 		sortMap.put(SortParam.COURSE_ID, Lection_.course);
 	}
 

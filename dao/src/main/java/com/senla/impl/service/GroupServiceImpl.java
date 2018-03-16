@@ -1,6 +1,7 @@
 package com.senla.impl.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.senla.api.dao.AbstractDao;
 import com.senla.api.dao.GroupDao;
 import com.senla.api.dao.PairDao;
+import com.senla.api.dao.StudentDao;
 import com.senla.api.service.GroupService;
 import com.senla.dao.search.GroupSearchParams;
 import com.senla.dao.search.Searchable;
@@ -24,6 +26,8 @@ public class GroupServiceImpl extends SearchableServiceImpl<GroupSearchParams, G
 	GroupDao groupDao;
 	@Autowired
 	PairDao pairDao;
+	@Autowired
+	StudentDao studentDao;
 
 	@Override
 	protected AbstractDao<Group> getDao() {
@@ -53,22 +57,48 @@ public class GroupServiceImpl extends SearchableServiceImpl<GroupSearchParams, G
 
 	@Override
 	public void addStudentToGroup(Long idStudent, Long idGroup) {
-		groupDao.addStudentToGroup(idStudent, idGroup);
+		Group group = groupDao.get(idGroup);
+		Student student = studentDao.get(idStudent);
+		student.setGroup(group);
+		studentDao.update(student);
 	}
 
 	@Override
 	public void removeStudentFromGroup(Long idStudent) {
-		groupDao.removeStudentFromGroup(idStudent);
+		Student student = studentDao.get(idStudent);
+		student.setGroup(null);
+		studentDao.update(student);
 	}
 
 	@Override
-	public List<Pair> getPairsByGroupId(Long idGroup) {
-		return groupDao.getPairsByGroupId(idGroup);
+	public void addstudentsToGroup(Long idGroup, List<Long> students) {
+		Group group = groupDao.get(idGroup);
+		List<Long> groupStudents = group.getStudents().stream().map(lection -> lection.getId())
+				.collect(Collectors.toList());
+		for (Long idStudent : students) {
+			if (groupStudents.contains(idStudent)) {
+				groupStudents.remove(idStudent);
+			} else {
+				Student student = studentDao.get(idStudent);
+				student.setGroup(group);
+				studentDao.update(student);
+			}
+		}
+		for (Long idStudent : groupStudents) {
+			Student student = studentDao.get(idStudent);
+			student.setGroup(null);
+			studentDao.update(student);
+		}
 	}
 
 	@Override
-	public List<Student> getStudentsByGroupId(Long idGroup) {
-		return groupDao.getStudentsByGroupId(idGroup);
+	public List<Group> getGroupsByPairId(Long idPair) {
+		return groupDao.getGroupsByPairId(idPair);
+	}
+
+	@Override
+	public List<Group> getGroupsWithoutPair(Long idPair) {
+		return groupDao.getGroupsWithoutPair(idPair);
 	}
 
 }

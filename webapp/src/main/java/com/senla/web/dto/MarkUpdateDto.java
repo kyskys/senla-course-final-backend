@@ -1,18 +1,9 @@
 package com.senla.web.dto;
 
 public class MarkUpdateDto {
-	private Long id;
 	private Long pair;
 	private Long student;
 	private Integer mark;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public Long getPair() {
 		return pair;

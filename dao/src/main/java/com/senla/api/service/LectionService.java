@@ -7,6 +7,7 @@ import com.senla.dao.search.LectionSearchParams;
 import com.senla.dao.search.Searchable;
 import com.senla.dao.search.SortParam;
 import com.senla.entity.Lection;
+import com.senla.entity.util.DictionaryItem;
 
 public interface LectionService extends AbstractService<Lection>, Searchable<LectionSearchParams, Lection> {
 
@@ -17,4 +18,5 @@ public interface LectionService extends AbstractService<Lection>, Searchable<Lec
 	List<Lection> getLectionsByCourseId(Long idCourse);
 
 	Collection<Lection> getLectionsWithoutCourse();
+
 }

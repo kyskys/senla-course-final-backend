@@ -1,22 +1,27 @@
 package com.senla.dao.search;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class PairSearchParams {
 	private Long id;
+	private String name;
 	private LocalDateTime date;
 	private String lection;
-	private LocalTime startTime;
-	private LocalTime endTime;
 
-	public PairSearchParams(Long id, LocalDateTime date, String lection, LocalTime startTime, LocalTime endTime) {
+	public PairSearchParams(Long id, String name, LocalDateTime date, String lection) {
 		super();
 		this.id = id;
+		this.name = name;
 		this.date = date;
 		this.lection = lection;
-		this.startTime = startTime;
-		this.endTime = endTime;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Long getId() {
@@ -43,19 +48,4 @@ public class PairSearchParams {
 		this.lection = lection;
 	}
 
-	public LocalTime getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(LocalTime startTime) {
-		this.startTime = startTime;
-	}
-
-	public LocalTime getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(LocalTime endTime) {
-		this.endTime = endTime;
-	}
 }

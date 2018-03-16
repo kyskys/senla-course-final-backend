@@ -1,15 +1,11 @@
 package com.senla.web.dto;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 public class PairUpdateDto {
 	private Long id;
 	private String name;
 	private Long time;
-	private LocalDateTime date;
+	private String date;
 	private Long lection;
-	private List<Long> groups;
 
 	public Long getId() {
 		return id;
@@ -35,14 +31,6 @@ public class PairUpdateDto {
 		this.time = time;
 	}
 
-	public LocalDateTime getDate() {
-		return date;
-	}
-
-	public void setDate(LocalDateTime date) {
-		this.date = date;
-	}
-
 	public Long getLection() {
 		return lection;
 	}
@@ -51,11 +39,12 @@ public class PairUpdateDto {
 		this.lection = lection;
 	}
 
-	public List<Long> getGroups() {
-		return groups;
+	public String getDate() {
+		return date;
 	}
 
-	public void setGroups(List<Long> groups) {
-		this.groups = groups;
+	public void setDate(String date) {
+		this.date = date;
 	}
+
 }

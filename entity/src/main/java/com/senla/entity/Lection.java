@@ -1,10 +1,12 @@
 package com.senla.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -12,14 +14,14 @@ import javax.persistence.Table;
 public class Lection extends AbstractEntity {
 
 	@ManyToOne
-	@JoinColumn(name="course_id")
+	@JoinColumn(name = "course_id")
 	private Course course;
 
-	@Column(name="name")
+	@Column(name = "name")
 	private String name;
 
-	@OneToOne(mappedBy="lection")
-	private Pair pair;
+	@OneToMany(mappedBy = "lection")
+	private List<Pair> pair;
 
 	public Course getCourse() {
 		return course;
@@ -37,11 +39,11 @@ public class Lection extends AbstractEntity {
 		this.name = name;
 	}
 
-	public Pair getPair() {
+	public List<Pair> getPair() {
 		return pair;
 	}
 
-	public void setPair(Pair pair) {
+	public void setPair(List<Pair> pair) {
 		this.pair = pair;
 	}
 

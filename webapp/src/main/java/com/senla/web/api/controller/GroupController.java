@@ -11,11 +11,9 @@ import com.senla.web.dto.CreateGroupOrLectionDto;
 public interface GroupController {
 	GroupGetDto getGroup(Long id);
 
-	void createGroup(CreateGroupOrLectionDto dto);
+	GroupGetDto createGroup(CreateGroupOrLectionDto dto);
 
 	void deleteGroup(Long id);
-
-	void updateGroup(GroupDto dto, Long id);
 
 	List<GroupGetDto> getAllGroups();
 
@@ -34,6 +32,8 @@ public interface GroupController {
 	void removeStudentFromGroup(Long idStudent);
 
 	Long groupCount(Long id, String name);
+
+	void updateGroup(Long id, GroupDto dto);
 
 
 }

@@ -15,24 +15,26 @@ import com.senla.api.service.StudentService;
 import com.senla.dao.search.StudentSearchParams;
 import com.senla.dao.search.SortParam;
 import com.senla.entity.Student;
+import com.senla.entity.util.DictionaryItem;
 import com.senla.web.api.controller.StudentController;
 import com.senla.web.dto.StudentGetDto;
 import com.senla.web.dto.StudentUpdateDto;
 
 @RestController
+@RequestMapping("/api/student/")
 public class StudentControllerImpl implements StudentController {
 	@Autowired
 	StudentService studentService;
 	@Autowired
 	GroupService groupService;
 
-	@RequestMapping(value = "/api/student/{id}/", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{id}/", method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public StudentGetDto getStudent(@PathVariable("id") Long id) {
 		return new StudentGetDto(studentService.get(id));
 	}
 
-	@RequestMapping(value = "/api/student/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	@Override
 	public void deleteStudent(@PathVariable("id") Long id) {
 		Student student = new Student();
@@ -40,7 +42,7 @@ public class StudentControllerImpl implements StudentController {
 		studentService.delete(student);
 	}
 
-	@RequestMapping(value = "/api/student/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "{id}", method = RequestMethod.POST)
 	@Override
 	public void updateStudent(StudentUpdateDto dto, @PathVariable("id") Long id) {
 		Student student = new Student();
@@ -56,13 +58,13 @@ public class StudentControllerImpl implements StudentController {
 		studentService.update(student);
 	}
 
-	@RequestMapping(value = "/api/student/", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public List<StudentGetDto> getAllStudents() {
 		return studentService.getAll().stream().map(StudentGetDto::new).collect(Collectors.toList());
 	}
 
-	@RequestMapping(value = "/api/student/search", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "search", method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public List<StudentGetDto> search(@RequestParam(value = "sort", required = false) String sortBy,
 			@RequestParam(value = "id", required = false) Long id,
@@ -78,7 +80,7 @@ public class StudentControllerImpl implements StudentController {
 		return result;
 	}
 
-	@RequestMapping(value = "/api/student/count", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "count", method = RequestMethod.GET, produces = "application/json")
 	@Override
 	public Long studentCount(@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name,
@@ -89,4 +91,22 @@ public class StudentControllerImpl implements StudentController {
 		return studentService.count(searchParam);
 	}
 
+	@RequestMapping(value = "group/{group}", method = RequestMethod.GET)
+	public List<StudentGetDto> getStudentsByGroupId(@PathVariable("group") Long idGroup) {
+		List<StudentGetDto> result = studentService.getStudentsByGroupId(idGroup).stream().map(StudentGetDto::new)
+				.collect(Collectors.toList());
+		return result;
+	}
+
+	@RequestMapping(value = "group/", method = RequestMethod.GET)
+	public List<StudentGetDto> getStudentsWithoutGroup() {
+		List<StudentGetDto> result = studentService.getStudentsWithoutGroup().stream().map(StudentGetDto::new)
+				.collect(Collectors.toList());
+		return result;
+	}
+
+	@RequestMapping(value = "dictionary", method = RequestMethod.GET)
+	public List<DictionaryItem> getDictionary() {
+		return studentService.getDictionary();
+	}
 }

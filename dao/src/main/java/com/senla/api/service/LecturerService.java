@@ -11,4 +11,5 @@ public interface LecturerService extends AbstractService<Lecturer>, Searchable<L
 	void addCourseToLecturer(Long idCourse, Long idLecturer);
 
 	List<Course> getCoursesByLecturerId(Long idLecturer);
+	
 }

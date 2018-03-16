@@ -10,12 +10,7 @@ import com.senla.entity.Student;
 
 public interface GroupDao extends AbstractDao<Group>, Searchable<GroupSearchParams, Group> {
 
-	List<Pair> getPairsByGroupId(Long idGroup);
+	List<Group> getGroupsByPairId(Long idPair);
 
-	List<Student> getStudentsByGroupId(Long idGroup);
-
-	void addStudentToGroup(Long idStudent, Long idGroup);
-
-	void removeStudentFromGroup(Long idStudent);
-
+	List<Group> getGroupsWithoutPair(Long idPair);
 }

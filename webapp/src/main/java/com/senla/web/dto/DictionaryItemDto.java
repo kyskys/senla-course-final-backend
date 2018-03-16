@@ -1,20 +1,16 @@
 package com.senla.web.dto;
 
-import com.senla.entity.Lection;
-
-public class CourseLectionDto {
+public class DictionaryItemDto {
 	private Long id;
 	private String name;
 
-	public CourseLectionDto() {
+	public DictionaryItemDto() {
 
 	}
 
-	public CourseLectionDto(Lection lection) {
-		this.id = lection.getId();
-		if (lection.getName() != null) {
-			this.name = lection.getName();
-		}
+	public DictionaryItemDto(Long id, String name) {
+		this.id = id;
+		this.name = name;
 	}
 
 	public Long getId() {
@@ -32,5 +28,4 @@ public class CourseLectionDto {
 	public void setName(String name) {
 		this.name = name;
 	}
-
 }
