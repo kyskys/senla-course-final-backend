@@ -3,7 +3,10 @@ package com.senla.web.impl.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,16 +14,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.senla.api.service.CourseService;
-import com.senla.api.service.LecturerService;
 import com.senla.dao.search.CourseSearchParams;
 import com.senla.dao.search.SortParam;
 import com.senla.entity.Course;
 import com.senla.entity.util.DictionaryItem;
 import com.senla.holder.support.CurrentUserSupport;
-import com.senla.web.dto.CourseGetDto;
-import com.senla.web.dto.CourseUpdateDto;
-import com.senla.web.dto.CreateCourseDto;
+import com.senla.service.api.CourseService;
+import com.senla.service.api.LecturerService;
+import com.senla.web.dto.course.CourseGetDto;
+import com.senla.web.dto.course.CourseUpdateDto;
+import com.senla.web.dto.course.CourseCreateDto;
 
 @RestController
 @RequestMapping(value = "/api/course/")
@@ -30,13 +33,13 @@ public class CourseControllerImpl implements CurrentUserSupport {
 	@Autowired
 	LecturerService lecturerService;
 
-	@RequestMapping(value = "{id}/", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "{id}/", method = RequestMethod.GET)
 	public CourseGetDto getCourse(@PathVariable("id") Long id) {
 		return new CourseGetDto(courseService.get(id));
 	}
 
 	@RequestMapping(method = RequestMethod.PUT)
-	public CourseGetDto createCourse(@RequestBody CreateCourseDto dto) {
+	public CourseGetDto createCourse(@Valid @RequestBody CourseCreateDto dto) {
 		Course course = new Course();
 		course.setLecturer(lecturerService.get(getCurrentUser().getId()));
 		course.setName(dto.getName());
@@ -52,29 +55,29 @@ public class CourseControllerImpl implements CurrentUserSupport {
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.POST)
-	public void updateCourse(@RequestBody CourseUpdateDto dto, @PathVariable("id") Long id) {
+	public void updateCourse(@Valid @RequestBody CourseUpdateDto dto, @PathVariable("id") Long id) {
 		Course course = courseService.get(id);
 		String name = dto.getName();
-		if(name!=null&&name!="") {
+		if (!StringUtils.isEmpty(name)) {
 			course.setName(name);
 		}
 		String description = dto.getDescription();
-		if(description!=null&&description!="") {
+		if (!StringUtils.isEmpty(description)) {
 			course.setDescription(description);
 		}
 		Long lecturer = dto.getLecturer();
-		if(lecturer!=null) {
+		if (lecturer != null && lecturer != 0) {
 			course.setLecturer(lecturerService.get(lecturer));
 		}
 		courseService.update(course);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(method = RequestMethod.GET)
 	public List<CourseGetDto> getAllCourses() {
 		return courseService.getAll().stream().map(CourseGetDto::new).collect(Collectors.toList());
 	}
 
-	@RequestMapping(value = "search", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "search", method = RequestMethod.GET)
 	public List<CourseGetDto> search(@RequestParam(value = "sort", required = false) String sortBy,
 			@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name,
@@ -97,20 +100,20 @@ public class CourseControllerImpl implements CurrentUserSupport {
 		courseService.removeLectionFromCourse(idLection);
 	}
 
-	@RequestMapping(value = "count", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "count", method = RequestMethod.GET)
 	public Long courseCount(@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name,
 			@RequestParam(value = "lecturer", required = false) String lecturer) {
 		CourseSearchParams searchParam = new CourseSearchParams(id, name, lecturer);
 		return courseService.count(searchParam);
 	}
-	
-	@RequestMapping(value="{id}/add/lection", method=RequestMethod.POST)
+
+	@RequestMapping(value = "{id}/add/lection", method = RequestMethod.POST)
 	public void addLectionsToCourse(@PathVariable("id") Long idCourse, @RequestBody List<Long> lections) {
 		courseService.addlectionsToCourse(idCourse, lections);
 	}
-	
-	@RequestMapping(value="dictionary",method=RequestMethod.GET)
+
+	@RequestMapping(value = "dictionary", method = RequestMethod.GET)
 	public List<DictionaryItem> getDictionary() {
 		return courseService.getDictionary();
 	}

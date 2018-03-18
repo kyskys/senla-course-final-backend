@@ -1,11 +1,23 @@
 package com.senla.web.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 public class UserRegisterDto {
+	@NotBlank
+	@Size(min = 1, max = 16)
 	private String login;
+	@NotBlank
+	@Size(min = 8, max = 45)
 	private String password;
-	private Integer number;
+	private String number;
+	@Size(max = 45)
 	private String email;
+	@NotBlank
+	@Size(max = 45)
 	private String name;
+	@NotBlank
+	private String role;
 
 	public String getLogin() {
 		return login;
@@ -23,11 +35,11 @@ public class UserRegisterDto {
 		this.password = password;
 	}
 
-	public Integer getNumber() {
+	public String getNumber() {
 		return number;
 	}
 
-	public void setNumber(Integer number) {
+	public void setNumber(String number) {
 		this.number = number;
 	}
 
@@ -45,5 +57,13 @@ public class UserRegisterDto {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 }

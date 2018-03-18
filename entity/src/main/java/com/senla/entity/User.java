@@ -32,7 +32,7 @@ public class User extends AbstractEntity {
 	protected RoleEnum role;
 
 	@Column(name = "phone_number", table = "user_details")
-	protected Integer number;
+	protected String number;
 
 	@Column(name = "login", table = "user_creds")
 	protected String login;
@@ -56,11 +56,11 @@ public class User extends AbstractEntity {
 		this.login = login;
 	}
 
-	public Integer getNumber() {
+	public String getNumber() {
 		return number;
 	}
 
-	public void setNumber(Integer number) {
+	public void setNumber(String number) {
 		this.number = number;
 	}
 

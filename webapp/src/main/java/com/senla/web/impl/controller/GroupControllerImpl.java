@@ -3,7 +3,10 @@ package com.senla.web.impl.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,17 +14,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.senla.api.service.GroupService;
 import com.senla.dao.search.GroupSearchParams;
 import com.senla.dao.search.SortParam;
 import com.senla.entity.Group;
 import com.senla.entity.util.DictionaryItem;
-import com.senla.web.dto.CreateGroupOrLectionDto;
-import com.senla.web.dto.GroupDto;
-import com.senla.web.dto.GroupGetDto;
-import com.senla.web.dto.GroupPairDto;
-import com.senla.web.dto.GroupStudentDto;
-import com.senla.web.dto.StudentGetDto;
+import com.senla.service.api.GroupService;
+import com.senla.web.dto.group.GroupCreateDto;
+import com.senla.web.dto.group.GroupDto;
+import com.senla.web.dto.group.GroupGetDto;
+import com.senla.web.dto.group.GroupPairDto;
+import com.senla.web.dto.group.GroupStudentDto;
+import com.senla.web.dto.student.StudentGetDto;
 
 @RestController
 @RequestMapping("/api/group/")
@@ -35,7 +38,7 @@ public class GroupControllerImpl {
 	}
 
 	@RequestMapping(method = RequestMethod.PUT)
-	public GroupGetDto createGroup(@RequestBody CreateGroupOrLectionDto dto) {
+	public GroupGetDto createGroup(@Valid @RequestBody GroupCreateDto dto) {
 		Group group = new Group();
 		group.setName(dto.getName());
 		return new GroupGetDto(groupService.create(group));
@@ -49,17 +52,11 @@ public class GroupControllerImpl {
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.POST)
-	public void updateGroup(@PathVariable("id") Long id, @RequestBody GroupDto dto) {
+	public void updateGroup(@PathVariable("id") Long id, @Valid @RequestBody GroupDto dto) {
 		Group group = groupService.get(id);
 		String name = dto.getName();
-		if (name != null) {
+		if (!StringUtils.isEmpty(name)) {
 			group.setName(name);
-		}
-		List<Long> students = dto.getStudents();
-		if (students != null) {
-			for (Long idStudent : students) {
-				groupService.addStudentToGroup(idStudent, id);
-			}
 		}
 		groupService.update(group);
 	}
@@ -117,7 +114,7 @@ public class GroupControllerImpl {
 	public List<DictionaryItem> getDictionary() {
 		return groupService.getDictionary();
 	}
-	
+
 	@RequestMapping(value = "pair/{pair}", method = RequestMethod.GET)
 	public List<GroupGetDto> getGroupsByPairId(@PathVariable("pair") Long idPair) {
 		List<GroupGetDto> result = groupService.getGroupsByPairId(idPair).stream().map(GroupGetDto::new)

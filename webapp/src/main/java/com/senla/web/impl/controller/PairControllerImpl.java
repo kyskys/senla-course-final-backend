@@ -6,7 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,21 +17,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.senla.api.service.GroupService;
-import com.senla.api.service.LectionService;
-import com.senla.api.service.MarkService;
-import com.senla.api.service.PairService;
-import com.senla.api.service.PairTimeService;
 import com.senla.dao.search.PairSearchParams;
 import com.senla.dao.search.SortParam;
 import com.senla.dao.util.DateFormatterUtil;
 import com.senla.entity.Pair;
 import com.senla.entity.util.DictionaryItem;
-import com.senla.web.dto.CreatePairDto;
-import com.senla.web.dto.GroupPairDto;
-import com.senla.web.dto.PairGetDto;
-import com.senla.web.dto.PairUpdateDto;
+import com.senla.service.api.GroupService;
+import com.senla.service.api.LectionService;
+import com.senla.service.api.MarkService;
+import com.senla.service.api.PairService;
+import com.senla.service.api.PairTimeService;
 import com.senla.web.dto.TimetableItemDto;
+import com.senla.web.dto.group.GroupPairDto;
+import com.senla.web.dto.pair.PairCreateDto;
+import com.senla.web.dto.pair.PairGetDto;
+import com.senla.web.dto.pair.PairUpdateDto;
 
 @RestController
 @RequestMapping("/api/pair/")
@@ -52,7 +55,7 @@ public class PairControllerImpl {
 	}
 
 	@RequestMapping(method = RequestMethod.PUT)
-	public PairGetDto createPair(@RequestBody CreatePairDto dto) {
+	public PairGetDto createPair(@Valid @RequestBody PairCreateDto dto) {
 		Pair pair = new Pair();
 		pair.setName(dto.getName());
 		pair.setDate(DateFormatterUtil.getDateFromString(dto.getDate()));
@@ -71,23 +74,23 @@ public class PairControllerImpl {
 
 	@RequestMapping(value = "{id}", method = RequestMethod.POST)
 
-	public void updatePair(@RequestBody PairUpdateDto dto, @PathVariable("id") Long id) {
+	public void updatePair(@Valid @RequestBody PairUpdateDto dto, @PathVariable("id") Long id) {
 		Pair pair = pairService.get(id);
 		LocalDateTime date = DateFormatterUtil.getDateFromString(dto.getDate());
 		if (date != null) {
 			pair.setDate(date);
 		}
 		Long idLection = dto.getLection();
-		if (idLection != null) {
+		if (idLection != null && idLection != 0) {
 			pair.setLection(lectionService.get(idLection));
 		}
 		Long idPairTime = dto.getTime();
-		if (idPairTime != null) {
+		if (idPairTime != null && idPairTime != 0) {
 			pair.setTime(pairTimeService.get(idPairTime));
 		}
 		String name = dto.getName();
-		if (name != null && name != "") {
-			pair.setName(dto.getName());
+		if (!StringUtils.isEmpty(name)) {
+			pair.setName(name);
 		}
 		pairService.update(pair);
 	}
@@ -108,7 +111,6 @@ public class PairControllerImpl {
 		PairSearchParams searchParam = new PairSearchParams(id, name, DateFormatterUtil.getDateFromString(date),
 				lection);
 		SortParam sortParam = SortParam.getValueOf(sortBy);
-		System.out.println(lection);
 		List<PairGetDto> result = pairService.search(sortParam, searchParam, limit, offset, asc).stream()
 				.map(PairGetDto::new).collect(Collectors.toList());
 		return result;
@@ -140,12 +142,14 @@ public class PairControllerImpl {
 	}
 
 	@RequestMapping(value = "timetable/{group}", method = RequestMethod.GET)
-	public List<TimetableItemDto> getTimetableByWeek(@RequestParam("day") String startOfWeek, @PathVariable("group") Long idGroup) {
-		//Map<String,List<PairGetDto>> result = new HashMap<String,List<PairGetDto>>();
+	public List<TimetableItemDto> getTimetableByWeek(@RequestParam("day") String startOfWeek,
+			@PathVariable("group") Long idGroup) {
+		// Map<String,List<PairGetDto>> result = new
+		// HashMap<String,List<PairGetDto>>();
 		LocalDateTime day = DateFormatterUtil.getDateFromString(startOfWeek);
-		return pairService.getPairsByWeek(day,idGroup).stream().map(TimetableItemDto::new).collect(Collectors.toList());
+		return pairService.getPairsByWeek(day, idGroup).stream().map(TimetableItemDto::new)
+				.collect(Collectors.toList());
 	}
-	
 
 	@RequestMapping(value = "{id}/add/group", method = RequestMethod.POST)
 	public void addGroupsToPair(@PathVariable("id") Long idPair, @RequestBody List<Long> groups) {

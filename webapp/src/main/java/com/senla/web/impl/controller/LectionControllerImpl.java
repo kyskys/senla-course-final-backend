@@ -3,7 +3,10 @@ package com.senla.web.impl.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,17 +14,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.senla.api.service.CourseService;
-import com.senla.api.service.LectionService;
-import com.senla.api.service.PairService;
 import com.senla.dao.search.LectionSearchParams;
 import com.senla.dao.search.SortParam;
 import com.senla.entity.Lection;
 import com.senla.entity.util.DictionaryItem;
-import com.senla.web.dto.CourseLectionDto;
-import com.senla.web.dto.CreateGroupOrLectionDto;
-import com.senla.web.dto.LectionDto;
-import com.senla.web.dto.LectionGetDto;
+import com.senla.service.api.CourseService;
+import com.senla.service.api.LectionService;
+import com.senla.service.api.PairService;
+import com.senla.web.dto.course.CourseLectionDto;
+import com.senla.web.dto.group.GroupCreateDto;
+import com.senla.web.dto.lection.LectionCreateDto;
+import com.senla.web.dto.lection.LectionDto;
+import com.senla.web.dto.lection.LectionGetDto;
 
 @RestController
 @RequestMapping("/api/lection/")
@@ -40,7 +44,7 @@ public class LectionControllerImpl {
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.PUT)
-	public LectionGetDto createLection(@RequestBody CreateGroupOrLectionDto dto) {
+	public LectionGetDto createLection(@Valid @RequestBody LectionCreateDto dto) {
 		Lection lection = new Lection();
 		lection.setName(dto.getName());
 		return new LectionGetDto(lectionService.create(lection));
@@ -54,14 +58,14 @@ public class LectionControllerImpl {
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.POST)
-	public void updateLection(@RequestBody LectionDto dto, @PathVariable("id") Long id) {
+	public void updateLection(@Valid @RequestBody LectionDto dto, @PathVariable("id") Long id) {
 		Lection lection = lectionService.get(id);
 		String name = dto.getName();
-		if(name!=null&&name!="") {
+		if (!StringUtils.isEmpty(name)) {
 			lection.setName(name);
 		}
 		Long idCourse = dto.getCourse();
-		if (idCourse != null) {
+		if (idCourse != null && idCourse != 0) {
 			lection.setCourse(courseService.get(idCourse));
 		}
 		lectionService.update(lection);
@@ -111,15 +115,15 @@ public class LectionControllerImpl {
 				.map(CourseLectionDto::new).collect(Collectors.toList());
 		return result;
 	}
-	
+
 	@RequestMapping(value = "course/", method = RequestMethod.GET)
 	public List<CourseLectionDto> getLectionsWithoutCourse() {
-		List<CourseLectionDto> result = lectionService.getLectionsWithoutCourse().stream()
-				.map(CourseLectionDto::new).collect(Collectors.toList());
+		List<CourseLectionDto> result = lectionService.getLectionsWithoutCourse().stream().map(CourseLectionDto::new)
+				.collect(Collectors.toList());
 		return result;
 	}
-	
-	@RequestMapping(value="dictionary",method=RequestMethod.GET)
+
+	@RequestMapping(value = "dictionary", method = RequestMethod.GET)
 	public List<DictionaryItem> getDictionary() {
 		return lectionService.getDictionary();
 	}

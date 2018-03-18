@@ -1,10 +1,15 @@
 package com.senla.web.dto;
 
+import javax.validation.constraints.Size;
+
 import com.senla.entity.User;
 
 public class UserDetailsDto {
+	@Size(max=45)
 	private String email;
-	private Integer number;
+	@Size(max=45)
+	private String number;
+	@Size(max=45)
 	private String name;
 
 	public UserDetailsDto() {
@@ -25,11 +30,11 @@ public class UserDetailsDto {
 		this.email = email;
 	}
 
-	public Integer getNumber() {
+	public String getNumber() {
 		return number;
 	}
 
-	public void setNumber(Integer number) {
+	public void setNumber(String number) {
 		this.number = number;
 	}
 
