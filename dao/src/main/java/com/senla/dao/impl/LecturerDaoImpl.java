@@ -2,8 +2,6 @@ package com.senla.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -75,7 +73,7 @@ public class LecturerDaoImpl extends SearchableDaoImpl<LecturerSearchParams, Lec
 			predicates.add(builder.like(root.get(Lecturer_.email), like(searchParam.getEmail())));
 		}
 		if (searchParam.getNumber() != null) {
-			predicates.add(builder.equal(root.get(Lecturer_.number), searchParam.getNumber()));
+			predicates.add(builder.like(root.get(Lecturer_.number), like(searchParam.getNumber())));
 		}
 		query.where(predicates.toArray(new Predicate[predicates.size()]));
 	}

@@ -4,9 +4,9 @@ public class LecturerSearchParams {
 	private Long id;
 	private String email;
 	private String name;
-	private Integer number;
+	private String number;
 
-	public LecturerSearchParams(Long id, String email, String name, Integer number) {
+	public LecturerSearchParams(Long id, String email, String name, String number) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -38,11 +38,11 @@ public class LecturerSearchParams {
 		this.name = name;
 	}
 
-	public Integer getNumber() {
+	public String getNumber() {
 		return number;
 	}
 
-	public void setNumber(Integer number) {
+	public void setNumber(String number) {
 		this.number = number;
 	}
 

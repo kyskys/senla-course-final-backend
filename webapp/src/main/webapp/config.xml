@@ -27,6 +27,6 @@
 		scope="request" />
 	<bean id="applicationContextProvider" class="com.senla.holder.provider.ApplicationContextProvider" />
 	
-	<import resource="DaoContext.xml" />
+	<import resource="context.xml" />
 	<import resource="beans.xml"/>
 </beans>

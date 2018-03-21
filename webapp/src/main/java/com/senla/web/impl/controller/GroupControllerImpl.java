@@ -22,9 +22,6 @@ import com.senla.service.api.GroupService;
 import com.senla.web.dto.group.GroupCreateDto;
 import com.senla.web.dto.group.GroupDto;
 import com.senla.web.dto.group.GroupGetDto;
-import com.senla.web.dto.group.GroupPairDto;
-import com.senla.web.dto.group.GroupStudentDto;
-import com.senla.web.dto.student.StudentGetDto;
 
 @RestController
 @RequestMapping("/api/group/")

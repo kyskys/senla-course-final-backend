@@ -3,13 +3,11 @@ package com.senla.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.senla.dao.api.MarkDao;
@@ -18,7 +16,6 @@ import com.senla.dao.search.SortParam;
 import com.senla.entity.Mark;
 import com.senla.entity.Mark_;
 import com.senla.entity.Pair_;
-import com.senla.entity.Student;
 import com.senla.entity.Student_;
 
 @Repository

@@ -10,9 +10,7 @@ import com.senla.dao.api.AbstractDao;
 import com.senla.dao.api.LectionDao;
 import com.senla.dao.search.LectionSearchParams;
 import com.senla.dao.search.Searchable;
-import com.senla.dao.search.SortParam;
 import com.senla.entity.Lection;
-import com.senla.entity.util.DictionaryItem;
 import com.senla.service.api.LectionService;
 
 @Transactional

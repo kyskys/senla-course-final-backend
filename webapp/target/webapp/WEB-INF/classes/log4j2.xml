@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" name="webapp" packages="">
+  <Properties>
+    <Property name="defaultFilename">logs/default.log</Property>
+	<Property name="errorFilename">logs/errors.log</Property>
+  </Properties>
+  <Appenders>
+ 	<File name="defaultAppender" fileName="${defaultFilename}">
+      <PatternLayout>
+        <Pattern>%d %p %c{1.} [%t] %m%n%throwable</Pattern>
+      </PatternLayout>
+    </File>
+	<File name="errorAppender" fileName="${errorFilename}">
+      <PatternLayout>
+        <Pattern>%d %p %c{1.} [%t] %m%n%throwable</Pattern>
+      </PatternLayout>
+    </File>
+  </Appenders>
+  <Loggers>
+    <Root level="all">
+    	<AppenderRef ref="defaultAppender"/> 
+    </Root>
+	<Logger level="error" name="com.senla.handler.GlobalExceptionHandler" additivity="true">
+	<AppenderRef ref="errorAppender"/>
+	</Logger>
+  </Loggers>
+</Configuration>

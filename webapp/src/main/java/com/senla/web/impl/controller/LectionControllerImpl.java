@@ -22,7 +22,6 @@ import com.senla.service.api.CourseService;
 import com.senla.service.api.LectionService;
 import com.senla.service.api.PairService;
 import com.senla.web.dto.course.CourseLectionDto;
-import com.senla.web.dto.group.GroupCreateDto;
 import com.senla.web.dto.lection.LectionCreateDto;
 import com.senla.web.dto.lection.LectionDto;
 import com.senla.web.dto.lection.LectionGetDto;
@@ -98,16 +97,6 @@ public class LectionControllerImpl {
 		LectionSearchParams searchParam = new LectionSearchParams(id, name, pair, course);
 		return lectionService.count(searchParam);
 	}
-
-	/*@RequestMapping(value = "{lection}/remove", method = RequestMethod.POST)
-	public void removePairFromLection(@PathVariable("lection") Long idLection) {
-		lectionService.removePairFromLection(idLection);
-	}
-
-	@RequestMapping(value = "{lection}/add/pair/{pair}", method = RequestMethod.POST)
-	public void addPairToLection(@PathVariable("pair") Long idPair, @PathVariable("lection") Long idLection) {
-		lectionService.addPairToLection(idPair, idLection);
-	}*/
 
 	@RequestMapping(value = "course/{course}", method = RequestMethod.GET)
 	public List<CourseLectionDto> getLectionsByCourseId(@PathVariable("course") Long idCourse) {

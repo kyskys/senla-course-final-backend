@@ -7,12 +7,12 @@
   <Appenders>
  	<File name="defaultAppender" fileName="${defaultFilename}">
       <PatternLayout>
-        <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+        <Pattern>%d %p %c{1.} [%t] %m%n%throwable</Pattern>
       </PatternLayout>
     </File>
 	<File name="errorAppender" fileName="${errorFilename}">
       <PatternLayout>
-        <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+        <Pattern>%d %p %c{1.} [%t] %m%n%throwable</Pattern>
       </PatternLayout>
     </File>
   </Appenders>

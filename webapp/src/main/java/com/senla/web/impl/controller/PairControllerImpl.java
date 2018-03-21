@@ -1,9 +1,7 @@
 package com.senla.web.impl.controller;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -28,7 +26,6 @@ import com.senla.service.api.MarkService;
 import com.senla.service.api.PairService;
 import com.senla.service.api.PairTimeService;
 import com.senla.web.dto.TimetableItemDto;
-import com.senla.web.dto.group.GroupPairDto;
 import com.senla.web.dto.pair.PairCreateDto;
 import com.senla.web.dto.pair.PairGetDto;
 import com.senla.web.dto.pair.PairUpdateDto;
@@ -103,7 +100,7 @@ public class PairControllerImpl {
 	@RequestMapping(value = "search", method = RequestMethod.GET, produces = "application/json")
 	public List<PairGetDto> search(@RequestParam(value = "sort", required = false) String sortBy,
 			@RequestParam(value = "id", required = false) Long id,
-			@RequestParam(value = "id", required = false) String name,
+			@RequestParam(value = "name", required = false) String name,
 			@RequestParam(value = "date", required = false) String date,
 			@RequestParam(value = "lection", required = false) String lection, @RequestParam("limit") Integer limit,
 			@RequestParam("offset") Integer offset, @RequestParam("asc") boolean asc) {
@@ -135,16 +132,9 @@ public class PairControllerImpl {
 		return pairTimeService.getDictionary();
 	}
 
-	/*@RequestMapping(value = "group/{group}", method = RequestMethod.GET, produces = "application/json")
-	public List<GroupPairDto> getPairsByGroupId(@PathVariable("group") Long idGroup) {
-		return pairService.getPairsByGroupId(idGroup).stream().map(GroupPairDto::new).collect(Collectors.toList());
-	}*/
-
 	@RequestMapping(value = "timetable/{group}", method = RequestMethod.GET)
 	public List<TimetableItemDto> getTimetableByWeek(@RequestParam("day") String startOfWeek,
 			@PathVariable("group") Long idGroup) {
-		// Map<String,List<PairGetDto>> result = new
-		// HashMap<String,List<PairGetDto>>();
 		LocalDateTime day = DateFormatterUtil.getDateFromString(startOfWeek);
 		return pairService.getPairsByWeek(day, idGroup).stream().map(TimetableItemDto::new)
 				.collect(Collectors.toList());

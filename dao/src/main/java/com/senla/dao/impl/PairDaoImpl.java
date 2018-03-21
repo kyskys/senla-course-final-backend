@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -18,7 +17,6 @@ import com.senla.dao.api.PairDao;
 import com.senla.dao.search.PairSearchParams;
 import com.senla.dao.search.SortParam;
 import com.senla.entity.Group_;
-import com.senla.entity.Lection;
 import com.senla.entity.Lection_;
 import com.senla.entity.Pair;
 import com.senla.entity.PairTime_;

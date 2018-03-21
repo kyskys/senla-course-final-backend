@@ -33,7 +33,6 @@ public class UserControllerImpl implements CurrentUserSupport {
 
 	@RequestMapping(value="role",method=RequestMethod.GET) 
 	public String getUserRole() {
-		System.out.println(getCurrentUser().getRole().getValue());
 		return "{\"role\" : \"" + getCurrentUser().getRole().getValue() + "\"}";
 	}
 	

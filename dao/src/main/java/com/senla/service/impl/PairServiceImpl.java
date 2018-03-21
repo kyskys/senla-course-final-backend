@@ -15,7 +15,6 @@ import com.senla.dao.search.PairSearchParams;
 import com.senla.dao.search.Searchable;
 import com.senla.entity.Group;
 import com.senla.entity.Pair;
-import com.senla.entity.Student;
 import com.senla.service.api.PairService;
 
 @Transactional

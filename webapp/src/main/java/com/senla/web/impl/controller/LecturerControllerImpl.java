@@ -3,11 +3,8 @@ package com.senla.web.impl.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +16,6 @@ import com.senla.entity.Lecturer;
 import com.senla.entity.util.DictionaryItem;
 import com.senla.service.api.LecturerService;
 import com.senla.web.dto.lecturer.LecturerGetDto;
-import com.senla.web.dto.lecturer.LecturerUpdateDto;
 
 @RestController
 @RequestMapping("/api/lecturer/")
@@ -49,7 +45,7 @@ public class LecturerControllerImpl {
 			@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name,
 			@RequestParam(value = "email", required = false) String email,
-			@RequestParam(value = "number", required = false) Integer number, @RequestParam("limit") Integer limit,
+			@RequestParam(value = "number", required = false) String number, @RequestParam("limit") Integer limit,
 			@RequestParam("offset") Integer offset, @RequestParam("asc") boolean asc) {
 		LecturerSearchParams searchParam = new LecturerSearchParams(id, email, name, number);
 		SortParam sortParam = SortParam.getValueOf(sortBy);
@@ -62,15 +58,10 @@ public class LecturerControllerImpl {
 	public Long lecturerCount(@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name,
 			@RequestParam(value = "email", required = false) String email,
-			@RequestParam(value = "number", required = false) Integer number) {
+			@RequestParam(value = "number", required = false) String number) {
 		LecturerSearchParams searchParam = new LecturerSearchParams(id, name, email, number);
 		return lecturerService.count(searchParam);
 	}
-
-	/*@RequestMapping(value = "{lecturer}/add/course/{course}", method = RequestMethod.POST)
-	public void addCourseToLecturer(@PathVariable("course") Long idCourse, @PathVariable("lecturer") Long idLecturer) {
-		lecturerService.addCourseToLecturer(idCourse, idLecturer);
-	}*/
 	
 	@RequestMapping(value="dictionary",method=RequestMethod.GET)
 	public List<DictionaryItem> getDictionary() {

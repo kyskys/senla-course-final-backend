@@ -21,7 +21,7 @@
    
    <context-param>
       <param-name>contextConfigLocation</param-name>
-      <param-value>JsonMapperConfig.xml</param-value>
+      <param-value>config.xml</param-value>
    </context-param>
 
    <listener>

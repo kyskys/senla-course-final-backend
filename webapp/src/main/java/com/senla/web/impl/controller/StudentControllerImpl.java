@@ -17,7 +17,6 @@ import com.senla.entity.util.DictionaryItem;
 import com.senla.service.api.GroupService;
 import com.senla.service.api.StudentService;
 import com.senla.web.dto.student.StudentGetDto;
-import com.senla.web.dto.student.StudentUpdateDto;
 
 @RestController
 @RequestMapping("/api/student/")
