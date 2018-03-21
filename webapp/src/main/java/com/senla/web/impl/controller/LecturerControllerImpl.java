@@ -39,7 +39,7 @@ public class LecturerControllerImpl {
 		lecturerService.delete(lecturer);
 	}
 
-	@RequestMapping(value = "", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value="all", method = RequestMethod.GET, produces = "application/json")
 	public List<LecturerGetDto> getAllLecturers() {
 		return lecturerService.getAll().stream().map(LecturerGetDto::new).collect(Collectors.toList());
 	}
@@ -67,10 +67,10 @@ public class LecturerControllerImpl {
 		return lecturerService.count(searchParam);
 	}
 
-	@RequestMapping(value = "{lecturer}/add/course/{course}", method = RequestMethod.POST)
+	/*@RequestMapping(value = "{lecturer}/add/course/{course}", method = RequestMethod.POST)
 	public void addCourseToLecturer(@PathVariable("course") Long idCourse, @PathVariable("lecturer") Long idLecturer) {
 		lecturerService.addCourseToLecturer(idCourse, idLecturer);
-	}
+	}*/
 	
 	@RequestMapping(value="dictionary",method=RequestMethod.GET)
 	public List<DictionaryItem> getDictionary() {

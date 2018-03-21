@@ -2,7 +2,7 @@ package com.senla.entity.util;
 
 public enum RoleEnum {
 
-	LECTURER(Values.LECTURER), STUDENT(Values.STUDENT), ADMIN(Values.LECTURER);
+	LECTURER(Values.LECTURER), STUDENT(Values.STUDENT), ADMIN(Values.ADMIN);
 
 	private String value;
 

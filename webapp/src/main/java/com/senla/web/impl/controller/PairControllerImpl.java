@@ -95,8 +95,7 @@ public class PairControllerImpl {
 		pairService.update(pair);
 	}
 
-	@RequestMapping(value = "", method = RequestMethod.GET, produces = "application/json")
-
+	@RequestMapping(value="all", method = RequestMethod.GET, produces = "application/json")
 	public List<PairGetDto> getAllPairs() {
 		return pairService.getAll().stream().map(PairGetDto::new).collect(Collectors.toList());
 	}
@@ -136,10 +135,10 @@ public class PairControllerImpl {
 		return pairTimeService.getDictionary();
 	}
 
-	@RequestMapping(value = "group/{group}", method = RequestMethod.GET, produces = "application/json")
+	/*@RequestMapping(value = "group/{group}", method = RequestMethod.GET, produces = "application/json")
 	public List<GroupPairDto> getPairsByGroupId(@PathVariable("group") Long idGroup) {
 		return pairService.getPairsByGroupId(idGroup).stream().map(GroupPairDto::new).collect(Collectors.toList());
-	}
+	}*/
 
 	@RequestMapping(value = "timetable/{group}", method = RequestMethod.GET)
 	public List<TimetableItemDto> getTimetableByWeek(@RequestParam("day") String startOfWeek,

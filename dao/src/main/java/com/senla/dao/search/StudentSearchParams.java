@@ -4,10 +4,10 @@ public class StudentSearchParams {
 	private Long id;
 	private String email;
 	private String name;
-	private Integer number;
+	private String number;
 	private String group;
 
-	public StudentSearchParams(Long id, String email, String name, Integer number, String group) {
+	public StudentSearchParams(Long id,  String name, String email, String number, String group) {
 		super();
 		this.id = id;
 		this.email = email;
@@ -40,11 +40,11 @@ public class StudentSearchParams {
 		this.name = name;
 	}
 
-	public Integer getNumber() {
+	public String getNumber() {
 		return number;
 	}
 
-	public void setNumber(Integer number) {
+	public void setNumber(String number) {
 		this.number = number;
 	}
 

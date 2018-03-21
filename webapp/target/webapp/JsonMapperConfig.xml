@@ -21,6 +21,7 @@
 	<context:annotation-config />
 
 	<context:component-scan base-package="com.senla.web.impl.controller" />
+	<context:component-scan base-package="com.senla.handler" />
 	
 	<bean id="currentUserHolder" class="com.senla.holder.user.CurrentUserHolder"
 		scope="request" />

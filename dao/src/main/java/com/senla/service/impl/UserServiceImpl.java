@@ -24,6 +24,7 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		return userDao;
 	}
 
+	@Override
 	public CodeEnum checkUser(String login, String password) {
 		try {
 			User user = userDao.getUserByLogin(login);
@@ -38,4 +39,16 @@ public class UserServiceImpl extends AbstractServiceImpl<User> implements UserSe
 		return userDao.getUserByLogin(login);
 	}
 
+	@Override
+	public boolean isUserExist(String login) {
+		try {
+			getUserByLogin(login);
+			return true;
+		} catch (NoResultException e) {
+			return false;
+		}
+	}
+
+	
+	
 }

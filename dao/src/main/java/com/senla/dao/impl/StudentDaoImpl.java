@@ -47,7 +47,7 @@ public class StudentDaoImpl extends SearchableDaoImpl<StudentSearchParams, Stude
 			predicates.add(builder.like(root.get(Student_.email), like(searchParam.getEmail())));
 		}
 		if (searchParam.getNumber() != null) {
-			predicates.add(builder.equal(root.get(Student_.number), searchParam.getNumber()));
+			predicates.add(builder.like(root.get(Student_.number), like(searchParam.getNumber())));
 		}
 		if (searchParam.getGroup() != null) {
 			predicates.add(builder.like(root.join(Student_.group).get(Group_.name), like(searchParam.getGroup())));

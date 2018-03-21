@@ -39,7 +39,7 @@ public class StudentControllerImpl {
 		studentService.delete(student);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value="all", method = RequestMethod.GET, produces = "application/json")
 	public List<StudentGetDto> getAllStudents() {
 		return studentService.getAll().stream().map(StudentGetDto::new).collect(Collectors.toList());
 	}
@@ -49,7 +49,7 @@ public class StudentControllerImpl {
 			@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name,
 			@RequestParam(value = "email", required = false) String email,
-			@RequestParam(value = "number", required = false) Integer number,
+			@RequestParam(value = "number", required = false) String number,
 			@RequestParam(value = "group", required = false) String group, @RequestParam("limit") Integer limit,
 			@RequestParam("offset") Integer offset, @RequestParam("asc") boolean asc) {
 		StudentSearchParams searchParam = new StudentSearchParams(id, name, email, number, group);
@@ -63,7 +63,7 @@ public class StudentControllerImpl {
 	public Long studentCount(@RequestParam(value = "id", required = false) Long id,
 			@RequestParam(value = "name", required = false) String name,
 			@RequestParam(value = "email", required = false) String email,
-			@RequestParam(value = "number", required = false) Integer number,
+			@RequestParam(value = "number", required = false) String number,
 			@RequestParam(value = "group", required = false) String group) {
 		StudentSearchParams searchParam = new StudentSearchParams(id, name, email, number, group);
 		return studentService.count(searchParam);

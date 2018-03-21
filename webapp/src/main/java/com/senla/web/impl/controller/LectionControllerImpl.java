@@ -43,7 +43,7 @@ public class LectionControllerImpl {
 		return new LectionGetDto(lectionService.get(id));
 	}
 
-	@RequestMapping(value = "", method = RequestMethod.PUT)
+	@RequestMapping(method = RequestMethod.PUT)
 	public LectionGetDto createLection(@Valid @RequestBody LectionCreateDto dto) {
 		Lection lection = new Lection();
 		lection.setName(dto.getName());
@@ -71,7 +71,7 @@ public class LectionControllerImpl {
 		lectionService.update(lection);
 	}
 
-	@RequestMapping(value = "", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value="all", method = RequestMethod.GET, produces = "application/json")
 	public List<LectionDto> getAllLections() {
 		return lectionService.getAll().stream().map(LectionDto::new).collect(Collectors.toList());
 	}
@@ -99,7 +99,7 @@ public class LectionControllerImpl {
 		return lectionService.count(searchParam);
 	}
 
-	@RequestMapping(value = "{lection}/remove", method = RequestMethod.POST)
+	/*@RequestMapping(value = "{lection}/remove", method = RequestMethod.POST)
 	public void removePairFromLection(@PathVariable("lection") Long idLection) {
 		lectionService.removePairFromLection(idLection);
 	}
@@ -107,7 +107,7 @@ public class LectionControllerImpl {
 	@RequestMapping(value = "{lection}/add/pair/{pair}", method = RequestMethod.POST)
 	public void addPairToLection(@PathVariable("pair") Long idPair, @PathVariable("lection") Long idLection) {
 		lectionService.addPairToLection(idPair, idLection);
-	}
+	}*/
 
 	@RequestMapping(value = "course/{course}", method = RequestMethod.GET)
 	public List<CourseLectionDto> getLectionsByCourseId(@PathVariable("course") Long idCourse) {

@@ -61,7 +61,7 @@ public class GroupControllerImpl {
 		groupService.update(group);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value="all", method = RequestMethod.GET, produces = "application/json")
 	public List<GroupGetDto> getAllGroups() {
 		return groupService.getAll().stream().map(GroupGetDto::new).collect(Collectors.toList());
 	}

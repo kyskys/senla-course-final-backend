@@ -1,6 +1,5 @@
 package com.senla.web.impl.controller;
 
-import javax.persistence.NoResultException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.senla.dao.util.CodeEnum;
 import com.senla.entity.Lecturer;
+import com.senla.entity.Person;
 import com.senla.entity.Student;
-import com.senla.entity.User;
-import com.senla.entity.util.RoleEnum;
 import com.senla.service.api.LecturerService;
 import com.senla.service.api.StudentService;
 import com.senla.service.api.UserService;
@@ -43,48 +41,24 @@ public class LoginControllerImpl {
 		}
 	}
 
-	/*
-	 * @RequestMapping(value = "user/register", method = RequestMethod.POST)
-	 * public CodeMessageDto registerStudent(@Valid @RequestBody UserRegisterDto
-	 * dto) { try { userService.getUserByLogin(dto.getLogin()); } catch
-	 * (NoResultException e) { return new CodeMessageDto(CodeEnum.LOGIN_EXIST);
-	 * } Student student = new Student(); student.setEmail(dto.getEmail());
-	 * student.setLogin(dto.getLogin()); student.setName(dto.getName());
-	 * student.setPassword(dto.getPassword());
-	 * student.setNumber(dto.getNumber()); studentService.create(student);
-	 * 
-	 * return new CodeMessageDto(CodeEnum.LOGIN_NOT_EXIST); }
-	 */
-
-	@RequestMapping(value = "/user/register", method = RequestMethod.POST)
-	public CodeMessageDto registerLecturer(@Valid @RequestBody UserRegisterDto dto) {
-		try {
-			userService.getUserByLogin(dto.getLogin());
-			return new CodeMessageDto(CodeEnum.LOGIN_EXIST);
-		} catch (NoResultException e) {
+	@RequestMapping(value = "/user/registrate", method = RequestMethod.POST)
+	public CodeMessageDto registrageUser(@Valid @RequestBody UserRegisterDto dto) {
+		if (!userService.isUserExist(dto.getLogin())) {
 			String role = dto.getRole();
+			Person person = role.equals("student") ? new Student() : new Lecturer();
+			person.setEmail(dto.getEmail());
+			person.setLogin(dto.getLogin());
+			person.setName(dto.getName());
+			person.setPassword(dto.getPassword());
+			person.setNumber(dto.getNumber());
 			if (role.equals("student")) {
-				Student student = new Student();
-				student.setEmail(dto.getEmail());
-				student.setLogin(dto.getLogin());
-				student.setName(dto.getName());
-				student.setPassword(dto.getPassword());
-				student.setNumber(dto.getNumber());
-				studentService.create(student);
-				return new CodeMessageDto(CodeEnum.LOGIN_NOT_EXIST);
-			} else if (role.equals("lecturer")) {
-				Lecturer lecturer = new Lecturer();
-				lecturer.setEmail(dto.getEmail());
-				lecturer.setLogin(dto.getLogin());
-				lecturer.setName(dto.getName());
-				lecturer.setPassword(dto.getPassword());
-				lecturer.setNumber(dto.getNumber());
-				lecturerService.create(lecturer);
-				return new CodeMessageDto(CodeEnum.LOGIN_NOT_EXIST);
+				studentService.create((Student) person);
+			} else {
+				lecturerService.create((Lecturer) person);
 			}
+			return new CodeMessageDto(CodeEnum.LOGIN_NOT_EXIST);
+		} else {
+			return new CodeMessageDto(CodeEnum.LOGIN_EXIST);
 		}
-		return new CodeMessageDto(CodeEnum.INVALID_INPUT);
-
 	}
-
 }

@@ -72,7 +72,7 @@ public class CourseControllerImpl implements CurrentUserSupport {
 		courseService.update(course);
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value="all", method = RequestMethod.GET)
 	public List<CourseGetDto> getAllCourses() {
 		return courseService.getAll().stream().map(CourseGetDto::new).collect(Collectors.toList());
 	}

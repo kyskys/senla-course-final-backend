@@ -9,7 +9,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(Person.class)
 public abstract class Person_ extends com.senla.entity.AbstractEntity_ {
 
-	public static volatile SingularAttribute<Person, Integer> number;
+	public static volatile SingularAttribute<Person, String> number;
 	public static volatile SingularAttribute<Person, String> password;
 	public static volatile SingularAttribute<Person, RoleEnum> role;
 	public static volatile SingularAttribute<Person, String> name;

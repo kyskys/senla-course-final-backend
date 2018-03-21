@@ -1,24 +1,30 @@
 package com.senla.web.util;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.senla.entity.util.RoleEnum;
+import com.senla.handler.GlobalExceptionHandler;
 
 public class PrivilegiesManager {
 	static {
 		privilegieMap = new HashMap<String, Set<RoleEnum>>();
-		loadMapForPath("C:/privilegies.properties");
+		loadMapForPath("privilegies.properties");
 	}
 	private static Map<String, Set<RoleEnum>> privilegieMap;
+	private static Logger logger = LogManager.getLogger(GlobalExceptionHandler.class);
 
 	public static void loadMapForPath(String path) {
-		try (FileInputStream fis = new FileInputStream(path)) {
+		ClassLoader loader = Thread.currentThread().getContextClassLoader();
+		try (InputStream fis = loader.getResourceAsStream(path)) {
 			Properties props = new Properties();
 			props.load(fis);
 			for (String key : props.stringPropertyNames()) {
@@ -36,7 +42,7 @@ public class PrivilegiesManager {
 				privilegieMap.put(key, rolesSet);
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 

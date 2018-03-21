@@ -7,4 +7,6 @@ public interface UserService extends AbstractService<User> {
 	User getUserByLogin(String login);
 
 	CodeEnum checkUser(String login, String password);
+	
+	boolean isUserExist(String login);
 }

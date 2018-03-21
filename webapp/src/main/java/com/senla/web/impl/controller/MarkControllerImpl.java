@@ -42,7 +42,7 @@ public class MarkControllerImpl implements CurrentUserSupport {
 		return new MarkGetDto(markService.get(id));
 	}
 
-	@RequestMapping(value = "", method = RequestMethod.PUT)
+	@RequestMapping(method = RequestMethod.PUT)
 	public void createMark(@Valid @RequestBody MarkCreateDto dto) {
 		Mark mark = new Mark();
 		mark.setPair(pairService.get(dto.getPair()));
@@ -76,7 +76,7 @@ public class MarkControllerImpl implements CurrentUserSupport {
 		markService.update(mark);
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value="all", method = RequestMethod.GET)
 	public List<MarkGetDto> getAllMarks() {
 		return markService.getAll().stream().map(MarkGetDto::new).collect(Collectors.toList());
 	}
